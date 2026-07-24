@@ -1,0 +1,208 @@
+openapi: 3.1.0
+info:
+  title: SpecCheck Authentication Labs API
+  version: v1
+  summary: Optical lab ordering API for eyewear prescriptions, lens catalogs, and orders.
+  description: SpecCheck is an optical lab ordering platform. Its REST API lets eyecare practices and partners look up the labs and lens catalogs available to a user, retrieve a lab's order settings, and create prescription (rx), frame, and multi-pair orders programmatically. Authentication uses a bearer token obtained from client credentials, plus a `User-Email` header identifying the acting SpecCheck Dashboard user. POST requests support an `Idempotency-Key` header for safe retries. This specification was reconstructed by API Evangelist from SpecCheck's public documentation at https://docs.speccheckrx.com and is not an official SpecCheck artifact.
+  contact:
+    name: SpecCheck
+    url: https://docs.speccheckrx.com/introduction
+  x-apis-source: https://docs.speccheckrx.com/llms.txt
+  x-generated-by: api-evangelist enrichment pipeline (from docs)
+servers:
+- url: https://api.speccheckrx.com
+  description: Production
+- url: https://api-staging.speccheckrx.com
+  description: Staging (testing and development)
+security:
+- bearerAuth: []
+tags:
+- name: Labs
+  description: Labs associated with a user and their order settings.
+paths:
+  /v1/labs:
+    get:
+      operationId: listLabs
+      tags:
+      - Labs
+      summary: List Labs
+      description: Returns the labs associated with the user identified by the `User-Email` header. If there are no labs, `data` is an empty array.
+      parameters:
+      - $ref: '#/components/parameters/UserEmail'
+      responses:
+        '200':
+          description: A list of labs for the user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Lab'
+              example:
+                data:
+                - id: lab_123
+                  name: Acme Lab
+                  account_number: '1234567'
+                - id: lab_456
+                  name: VisionWorks Lab
+                  account_number: '7654321'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionError'
+  /v1/labs/{id}/order_settings:
+    get:
+      operationId: retrieveOrderSettings
+      tags:
+      - Labs
+      summary: Retrieve Order Settings
+      description: Returns order configuration options for a lab.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the lab.
+        schema:
+          type: string
+      - $ref: '#/components/parameters/UserEmail'
+      - name: account_number
+        in: query
+        required: true
+        description: The lab account number for this request.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Order settings for the lab.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderSettings'
+              example:
+                frame_handling_options:
+                - Frame to Come
+                - Lenses Only
+                frame_materials:
+                - Metal
+                - Zyl
+                mounting_options:
+                - Edged & Mount
+                - Uncuts Only
+                order_types:
+                - rx
+                - frame
+                redo_types:
+                - Remake
+                - Warranty
+                services:
+                - Roll & Polish Edges
+                - Add/Replace Nose Pads
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionError'
+components:
+  schemas:
+    OrderSettings:
+      type: object
+      properties:
+        frame_handling_options:
+          type: array
+          items:
+            type: string
+        frame_materials:
+          type: array
+          items:
+            type: string
+        mounting_options:
+          type: array
+          items:
+            type: string
+        order_types:
+          type: array
+          items:
+            type: string
+        redo_types:
+          type: array
+          items:
+            type: string
+        services:
+          type: array
+          items:
+            type: string
+    Lab:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the lab.
+        name:
+          type: string
+          description: The name of the lab.
+        account_number:
+          type: string
+          description: The lab account number.
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          required:
+          - type
+          - message
+          properties:
+            type:
+              type: string
+              enum:
+              - invalid_request_error
+              - authentication_error
+              - permission_error
+              - api_error
+            message:
+              type: string
+            code:
+              type: string
+              description: Stable machine-readable string
+              when applicable.: null
+            param:
+              type: string
+              description: Related input field or header
+              when applicable.: null
+  responses:
+    PermissionError:
+      description: Authenticated but not allowed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              type: permission_error
+              message: You do not have permission to perform this action.
+    AuthenticationError:
+      description: Authentication failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              type: authentication_error
+              message: Authentication failed.
+  parameters:
+    UserEmail:
+      name: User-Email
+      in: header
+      required: true
+      description: Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.
+      schema:
+        type: string
+        format: email
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token obtained from POST /v1/oauth/token using client credentials. Tokens expire after 24 hours.

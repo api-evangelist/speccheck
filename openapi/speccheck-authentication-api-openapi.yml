@@ -1,0 +1,126 @@
+openapi: 3.1.0
+info:
+  title: SpecCheck Authentication API
+  version: v1
+  summary: Optical lab ordering API for eyewear prescriptions, lens catalogs, and orders.
+  description: SpecCheck is an optical lab ordering platform. Its REST API lets eyecare practices and partners look up the labs and lens catalogs available to a user, retrieve a lab's order settings, and create prescription (rx), frame, and multi-pair orders programmatically. Authentication uses a bearer token obtained from client credentials, plus a `User-Email` header identifying the acting SpecCheck Dashboard user. POST requests support an `Idempotency-Key` header for safe retries. This specification was reconstructed by API Evangelist from SpecCheck's public documentation at https://docs.speccheckrx.com and is not an official SpecCheck artifact.
+  contact:
+    name: SpecCheck
+    url: https://docs.speccheckrx.com/introduction
+  x-apis-source: https://docs.speccheckrx.com/llms.txt
+  x-generated-by: api-evangelist enrichment pipeline (from docs)
+servers:
+- url: https://api.speccheckrx.com
+  description: Production
+- url: https://api-staging.speccheckrx.com
+  description: Staging (testing and development)
+security:
+- bearerAuth: []
+tags:
+- name: Authentication
+  description: Obtain bearer access tokens.
+paths:
+  /v1/oauth/token:
+    post:
+      operationId: createAccessToken
+      tags:
+      - Authentication
+      summary: Create Access Token
+      description: Creates a bearer token for API authentication from your application's client credentials. The returned token expires after 24 hours; request a new token before each API session as a best practice.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccessTokenRequest'
+            example:
+              client_id: '{{CLIENT_ID}}'
+              client_secret: '{{CLIENT_SECRET}}'
+      responses:
+        '200':
+          description: An access token object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessToken'
+              example:
+                token: tok_123
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+components:
+  schemas:
+    AccessToken:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Bearer token for the Authorization header. Expires after 24 hours.
+    CreateAccessTokenRequest:
+      type: object
+      required:
+      - client_id
+      - client_secret
+      properties:
+        client_id:
+          type: string
+          description: The client ID that identifies your application.
+        client_secret:
+          type: string
+          description: The client secret for your application.
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          required:
+          - type
+          - message
+          properties:
+            type:
+              type: string
+              enum:
+              - invalid_request_error
+              - authentication_error
+              - permission_error
+              - api_error
+            message:
+              type: string
+            code:
+              type: string
+              description: Stable machine-readable string
+              when applicable.: null
+            param:
+              type: string
+              description: Related input field or header
+              when applicable.: null
+  responses:
+    InvalidRequest:
+      description: Missing or invalid parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              type: invalid_request_error
+              message: Example message from the API.
+              code: invalid_request
+              param: User-Email
+    AuthenticationError:
+      description: Authentication failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              type: authentication_error
+              message: Authentication failed.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token obtained from POST /v1/oauth/token using client credentials. Tokens expire after 24 hours.

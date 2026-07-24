@@ -1,0 +1,273 @@
+openapi: 3.1.0
+info:
+  title: SpecCheck Authentication Catalogs API
+  version: v1
+  summary: Optical lab ordering API for eyewear prescriptions, lens catalogs, and orders.
+  description: SpecCheck is an optical lab ordering platform. Its REST API lets eyecare practices and partners look up the labs and lens catalogs available to a user, retrieve a lab's order settings, and create prescription (rx), frame, and multi-pair orders programmatically. Authentication uses a bearer token obtained from client credentials, plus a `User-Email` header identifying the acting SpecCheck Dashboard user. POST requests support an `Idempotency-Key` header for safe retries. This specification was reconstructed by API Evangelist from SpecCheck's public documentation at https://docs.speccheckrx.com and is not an official SpecCheck artifact.
+  contact:
+    name: SpecCheck
+    url: https://docs.speccheckrx.com/introduction
+  x-apis-source: https://docs.speccheckrx.com/llms.txt
+  x-generated-by: api-evangelist enrichment pipeline (from docs)
+servers:
+- url: https://api.speccheckrx.com
+  description: Production
+- url: https://api-staging.speccheckrx.com
+  description: Staging (testing and development)
+security:
+- bearerAuth: []
+tags:
+- name: Catalogs
+  description: Lens styles, materials, and add-ons available for a lab.
+paths:
+  /v1/catalogs/styles:
+    get:
+      operationId: listLensStyles
+      tags:
+      - Catalogs
+      summary: List Lens Styles
+      description: Returns lens styles for a lab for a given lens type.
+      parameters:
+      - $ref: '#/components/parameters/UserEmail'
+      - $ref: '#/components/parameters/LabQuery'
+      - $ref: '#/components/parameters/AccountNumberQuery'
+      - name: lens_type
+        in: query
+        required: true
+        description: The type of lens.
+        schema:
+          type: string
+          enum:
+          - single_vision
+          - multifocal
+      responses:
+        '200':
+          description: A list of lens styles.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NamedObject'
+              example:
+                data:
+                - id: style_123
+                  name: Single Vision
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionError'
+  /v1/catalogs/materials:
+    get:
+      operationId: listLensMaterials
+      tags:
+      - Catalogs
+      summary: List Lens Materials
+      description: Returns lens materials for a lab for a given lens style.
+      parameters:
+      - $ref: '#/components/parameters/UserEmail'
+      - $ref: '#/components/parameters/LabQuery'
+      - $ref: '#/components/parameters/AccountNumberQuery'
+      - name: style
+        in: query
+        required: true
+        description: The ID of the lens style.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of lens materials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NamedObject'
+              example:
+                data:
+                - id: material_123
+                  name: Polycarbonate
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionError'
+  /v1/catalogs/addons:
+    get:
+      operationId: listLensAddons
+      tags:
+      - Catalogs
+      summary: List Lens Addons
+      description: Returns lens add-ons (coats, colors, tints) for a lab for a given lens style and material.
+      parameters:
+      - $ref: '#/components/parameters/UserEmail'
+      - $ref: '#/components/parameters/LabQuery'
+      - $ref: '#/components/parameters/AccountNumberQuery'
+      - name: style
+        in: query
+        required: true
+        description: The ID of the lens style.
+        schema:
+          type: string
+      - name: material
+        in: query
+        required: true
+        description: The ID of the lens material.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Lens add-ons for the lab.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/LensAddons'
+              example:
+                data:
+                  coats:
+                  - id: coat_123
+                    name: Anti-Reflective Coating
+                    type: ar
+                  colors:
+                  - id: color_123
+                    name: Crystal Gray
+                  tints:
+                  - Gray
+                  - Brown
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionError'
+components:
+  schemas:
+    Coat:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type:
+          - string
+          - 'null'
+          enum:
+          - ar
+          - mirror
+          - scratch
+          - uv
+          - null
+          description: The type of coat. Null when not set.
+    LensAddons:
+      type: object
+      properties:
+        coats:
+          type: array
+          items:
+            $ref: '#/components/schemas/Coat'
+        colors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Color'
+        tints:
+          type: array
+          items:
+            type: string
+    Color:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    NamedObject:
+      type: object
+      description: A generic id/name catalog object (lens style or material).
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          required:
+          - type
+          - message
+          properties:
+            type:
+              type: string
+              enum:
+              - invalid_request_error
+              - authentication_error
+              - permission_error
+              - api_error
+            message:
+              type: string
+            code:
+              type: string
+              description: Stable machine-readable string
+              when applicable.: null
+            param:
+              type: string
+              description: Related input field or header
+              when applicable.: null
+  responses:
+    PermissionError:
+      description: Authenticated but not allowed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              type: permission_error
+              message: You do not have permission to perform this action.
+    AuthenticationError:
+      description: Authentication failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              type: authentication_error
+              message: Authentication failed.
+  parameters:
+    LabQuery:
+      name: lab
+      in: query
+      required: true
+      description: The ID of the lab for this request.
+      schema:
+        type: string
+    UserEmail:
+      name: User-Email
+      in: header
+      required: true
+      description: Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.
+      schema:
+        type: string
+        format: email
+    AccountNumberQuery:
+      name: account_number
+      in: query
+      required: true
+      description: The lab account number for this request.
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token obtained from POST /v1/oauth/token using client credentials. Tokens expire after 24 hours.
