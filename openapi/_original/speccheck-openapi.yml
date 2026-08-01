@@ -1,0 +1,613 @@
+openapi: 3.1.0
+info:
+  title: SpecCheck API
+  version: v1
+  summary: Optical lab ordering API for eyewear prescriptions, lens catalogs, and orders.
+  description: >-
+    SpecCheck is an optical lab ordering platform. Its REST API lets eyecare
+    practices and partners look up the labs and lens catalogs available to a
+    user, retrieve a lab's order settings, and create prescription (rx), frame,
+    and multi-pair orders programmatically. Authentication uses a bearer token
+    obtained from client credentials, plus a `User-Email` header identifying the
+    acting SpecCheck Dashboard user. POST requests support an `Idempotency-Key`
+    header for safe retries. This specification was reconstructed by API
+    Evangelist from SpecCheck's public documentation at
+    https://docs.speccheckrx.com and is not an official SpecCheck artifact.
+  contact:
+    name: SpecCheck
+    url: https://docs.speccheckrx.com/introduction
+  x-apis-source: https://docs.speccheckrx.com/llms.txt
+  x-generated-by: api-evangelist enrichment pipeline (from docs)
+servers:
+  - url: https://api.speccheckrx.com
+    description: Production
+  - url: https://api-staging.speccheckrx.com
+    description: Staging (testing and development)
+tags:
+  - name: Authentication
+    description: Obtain bearer access tokens.
+  - name: Labs
+    description: Labs associated with a user and their order settings.
+  - name: Catalogs
+    description: Lens styles, materials, and add-ons available for a lab.
+  - name: Orders
+    description: Create and list optical orders.
+security:
+  - bearerAuth: []
+paths:
+  /v1/oauth/token:
+    post:
+      operationId: createAccessToken
+      tags: [Authentication]
+      summary: Create Access Token
+      description: >-
+        Creates a bearer token for API authentication from your application's
+        client credentials. The returned token expires after 24 hours; request a
+        new token before each API session as a best practice.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccessTokenRequest'
+            example:
+              client_id: '{{CLIENT_ID}}'
+              client_secret: '{{CLIENT_SECRET}}'
+      responses:
+        '200':
+          description: An access token object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessToken'
+              example:
+                token: tok_123
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+  /v1/labs:
+    get:
+      operationId: listLabs
+      tags: [Labs]
+      summary: List Labs
+      description: >-
+        Returns the labs associated with the user identified by the `User-Email`
+        header. If there are no labs, `data` is an empty array.
+      parameters:
+        - $ref: '#/components/parameters/UserEmail'
+      responses:
+        '200':
+          description: A list of labs for the user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Lab'
+              example:
+                data:
+                  - {id: lab_123, name: Acme Lab, account_number: '1234567'}
+                  - {id: lab_456, name: VisionWorks Lab, account_number: '7654321'}
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionError'
+  /v1/labs/{id}/order_settings:
+    get:
+      operationId: retrieveOrderSettings
+      tags: [Labs]
+      summary: Retrieve Order Settings
+      description: Returns order configuration options for a lab.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the lab.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/UserEmail'
+        - name: account_number
+          in: query
+          required: true
+          description: The lab account number for this request.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order settings for the lab.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderSettings'
+              example:
+                frame_handling_options: [Frame to Come, Lenses Only]
+                frame_materials: [Metal, Zyl]
+                mounting_options: [Edged & Mount, Uncuts Only]
+                order_types: [rx, frame]
+                redo_types: [Remake, Warranty]
+                services: [Roll & Polish Edges, Add/Replace Nose Pads]
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionError'
+  /v1/catalogs/styles:
+    get:
+      operationId: listLensStyles
+      tags: [Catalogs]
+      summary: List Lens Styles
+      description: Returns lens styles for a lab for a given lens type.
+      parameters:
+        - $ref: '#/components/parameters/UserEmail'
+        - $ref: '#/components/parameters/LabQuery'
+        - $ref: '#/components/parameters/AccountNumberQuery'
+        - name: lens_type
+          in: query
+          required: true
+          description: The type of lens.
+          schema:
+            type: string
+            enum: [single_vision, multifocal]
+      responses:
+        '200':
+          description: A list of lens styles.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NamedObject'
+              example:
+                data:
+                  - {id: style_123, name: Single Vision}
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionError'
+  /v1/catalogs/materials:
+    get:
+      operationId: listLensMaterials
+      tags: [Catalogs]
+      summary: List Lens Materials
+      description: Returns lens materials for a lab for a given lens style.
+      parameters:
+        - $ref: '#/components/parameters/UserEmail'
+        - $ref: '#/components/parameters/LabQuery'
+        - $ref: '#/components/parameters/AccountNumberQuery'
+        - name: style
+          in: query
+          required: true
+          description: The ID of the lens style.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of lens materials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NamedObject'
+              example:
+                data:
+                  - {id: material_123, name: Polycarbonate}
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionError'
+  /v1/catalogs/addons:
+    get:
+      operationId: listLensAddons
+      tags: [Catalogs]
+      summary: List Lens Addons
+      description: Returns lens add-ons (coats, colors, tints) for a lab for a given lens style and material.
+      parameters:
+        - $ref: '#/components/parameters/UserEmail'
+        - $ref: '#/components/parameters/LabQuery'
+        - $ref: '#/components/parameters/AccountNumberQuery'
+        - name: style
+          in: query
+          required: true
+          description: The ID of the lens style.
+          schema:
+            type: string
+        - name: material
+          in: query
+          required: true
+          description: The ID of the lens material.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lens add-ons for the lab.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/LensAddons'
+              example:
+                data:
+                  coats:
+                    - {id: coat_123, name: Anti-Reflective Coating, type: ar}
+                  colors:
+                    - {id: color_123, name: Crystal Gray}
+                  tints: [Gray, Brown]
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionError'
+  /v1/orders:
+    get:
+      operationId: listOrders
+      tags: [Orders]
+      summary: List Orders
+      description: >-
+        Returns orders for a lab, sorted by creation date with the most recent
+        orders first. Supports cursor pagination via `starting_after` /
+        `ending_before` and a `created` date interval filter.
+      parameters:
+        - $ref: '#/components/parameters/UserEmail'
+        - $ref: '#/components/parameters/LabQuery'
+        - $ref: '#/components/parameters/AccountNumberQuery'
+        - name: created[gt]
+          in: query
+          description: Return orders created after this Unix timestamp (exclusive).
+          schema: {type: integer}
+        - name: created[gte]
+          in: query
+          description: Return orders created at or after this Unix timestamp (inclusive).
+          schema: {type: integer}
+        - name: created[lt]
+          in: query
+          description: Return orders created before this Unix timestamp (exclusive).
+          schema: {type: integer}
+        - name: created[lte]
+          in: query
+          description: Return orders created at or before this Unix timestamp (inclusive).
+          schema: {type: integer}
+        - name: ending_before
+          in: query
+          description: Cursor - an object ID to fetch the previous page.
+          schema: {type: string}
+        - name: starting_after
+          in: query
+          description: Cursor - an object ID to fetch the next page.
+          schema: {type: string}
+        - name: limit
+          in: query
+          description: Number of objects to return (1-100, default 10).
+          schema: {type: integer, minimum: 1, maximum: 100, default: 10}
+      responses:
+        '200':
+          description: A paginated list of orders.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  has_more:
+                    type: boolean
+                    description: Whether there are more orders beyond this page.
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
+              example:
+                has_more: false
+                data:
+                  - id: ord_1234
+                    tray_number: '1234'
+                    invoice_number: '1234'
+                    lab_status: in_progress
+                    created: 1710000000
+                    updated: 1710003600
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionError'
+    post:
+      operationId: createOrder
+      tags: [Orders]
+      summary: Create Order
+      description: >-
+        Creates an order for a user, either saved as a draft or submitted to the
+        lab. Supports rx, frame, redo, and multi-pair submissions. Send an
+        `Idempotency-Key` header to safely retry.
+      parameters:
+        - $ref: '#/components/parameters/UserEmail'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+      responses:
+        '200':
+          description: The created order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionError'
+        '500':
+          $ref: '#/components/responses/ApiError'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: >-
+        Bearer token obtained from POST /v1/oauth/token using client credentials.
+        Tokens expire after 24 hours.
+  parameters:
+    UserEmail:
+      name: User-Email
+      in: header
+      required: true
+      description: >-
+        Email address of the acting user. Must exactly match the email used to
+        log in to the SpecCheck Dashboard.
+      schema:
+        type: string
+        format: email
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: false
+      description: >-
+        Unique key (up to 255 chars; a v4 UUID works well) to safely retry a POST
+        without duplicating the operation. Do not use sensitive data as the key.
+      schema:
+        type: string
+        maxLength: 255
+    LabQuery:
+      name: lab
+      in: query
+      required: true
+      description: The ID of the lab for this request.
+      schema:
+        type: string
+    AccountNumberQuery:
+      name: account_number
+      in: query
+      required: true
+      description: The lab account number for this request.
+      schema:
+        type: string
+  responses:
+    InvalidRequest:
+      description: Missing or invalid parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              type: invalid_request_error
+              message: Example message from the API.
+              code: invalid_request
+              param: User-Email
+    AuthenticationError:
+      description: Authentication failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: {type: authentication_error, message: Authentication failed.}
+    PermissionError:
+      description: Authenticated but not allowed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: {type: permission_error, message: You do not have permission to perform this action.}
+    ApiError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: {type: api_error, message: Something went wrong.}
+  schemas:
+    CreateAccessTokenRequest:
+      type: object
+      required: [client_id, client_secret]
+      properties:
+        client_id:
+          type: string
+          description: The client ID that identifies your application.
+        client_secret:
+          type: string
+          description: The client secret for your application.
+    AccessToken:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Bearer token for the Authorization header. Expires after 24 hours.
+    Lab:
+      type: object
+      properties:
+        id: {type: string, description: The unique identifier for the lab.}
+        name: {type: string, description: The name of the lab.}
+        account_number: {type: string, description: The lab account number.}
+    NamedObject:
+      type: object
+      description: A generic id/name catalog object (lens style or material).
+      properties:
+        id: {type: string}
+        name: {type: string}
+    Coat:
+      type: object
+      properties:
+        id: {type: string}
+        name: {type: string}
+        type:
+          type: [string, 'null']
+          enum: [ar, mirror, scratch, uv, null]
+          description: The type of coat. Null when not set.
+    Color:
+      type: object
+      properties:
+        id: {type: string}
+        name: {type: string}
+    LensAddons:
+      type: object
+      properties:
+        coats:
+          type: array
+          items: {$ref: '#/components/schemas/Coat'}
+        colors:
+          type: array
+          items: {$ref: '#/components/schemas/Color'}
+        tints:
+          type: array
+          items: {type: string}
+    OrderSettings:
+      type: object
+      properties:
+        frame_handling_options: {type: array, items: {type: string}}
+        frame_materials: {type: array, items: {type: string}}
+        mounting_options: {type: array, items: {type: string}}
+        order_types: {type: array, items: {type: string}}
+        redo_types: {type: array, items: {type: string}}
+        services: {type: array, items: {type: string}}
+    Order:
+      type: object
+      properties:
+        id: {type: string, description: The unique identifier for the order.}
+        tray_number: {type: string}
+        invoice_number: {type: string}
+        lab_status: {type: string, description: Current status of the order at the lab.}
+        created: {type: integer, description: Creation time, seconds since Unix epoch.}
+        updated: {type: integer, description: Last update time, seconds since Unix epoch.}
+    Patient:
+      type: object
+      required: [first_name, last_name]
+      properties:
+        first_name: {type: string, maxLength: 50}
+        last_name: {type: string, maxLength: 50}
+        email: {type: string, format: email}
+        phone_number: {type: string, maxLength: 20}
+    Frame:
+      type: object
+      required: [handling, manufacturer, model, material, color, eye_size, bridge]
+      properties:
+        handling: {type: string, description: Must be one of frame_handling_options from Retrieve Order Settings.}
+        manufacturer: {type: string, maxLength: 50}
+        model: {type: string, maxLength: 50}
+        material: {type: string, description: Must be one of frame_materials from Retrieve Order Settings.}
+        color: {type: string, maxLength: 50}
+        eye_size: {type: integer, minimum: 10, maximum: 100, description: Eye size in mm.}
+        bridge: {type: integer, minimum: 10, maximum: 100, description: Bridge size in mm.}
+        temple: {type: integer, minimum: 100, maximum: 200, description: Temple length in mm.}
+        a: {type: number, minimum: 10, maximum: 100}
+        b: {type: number, minimum: 10, maximum: 100}
+        lens_ed: {type: number, minimum: 10, maximum: 100, description: Lens effective diameter in mm.}
+        vertex: {type: number, minimum: 1, maximum: 30}
+        pantoscopic_tilt: {type: number, minimum: -20, maximum: 20}
+        wrap: {type: number, minimum: 0, maximum: 40}
+        sku: {type: string, maxLength: 50}
+    Prism:
+      type: object
+      required: [power, direction]
+      properties:
+        power: {type: number, minimum: 0.01, maximum: 50, description: Prism power in prism diopters.}
+        direction: {type: string, description: 'in/out for horizontal, up/down for vertical.'}
+    EyeRx:
+      type: object
+      description: Prescription for one eye.
+      properties:
+        sphere: {type: number, minimum: -30, maximum: 30}
+        pd: {type: number, minimum: 20, maximum: 50, description: Monocular distance IPD in mm.}
+        near_pd: {type: number, minimum: 20, maximum: 50, description: Monocular near IPD in mm.}
+        cylinder: {type: number, minimum: -20, maximum: 20, description: Required when axis is provided.}
+        axis: {type: integer, minimum: 1, maximum: 180, description: Required when cylinder is provided.}
+        add: {type: number, minimum: 0.5, maximum: 5, description: Required when seg_height is provided.}
+        seg_height: {type: number, minimum: 0.5, maximum: 50, description: Required when add is provided.}
+        oc_height: {type: number, minimum: 0.5, maximum: 50}
+        horizontal_prism: {$ref: '#/components/schemas/Prism'}
+        vertical_prism: {$ref: '#/components/schemas/Prism'}
+    Rx:
+      type: object
+      description: Prescription details. At least one of left_eye or right_eye must be provided.
+      properties:
+        left_eye: {$ref: '#/components/schemas/EyeRx'}
+        right_eye: {$ref: '#/components/schemas/EyeRx'}
+    Lens:
+      type: object
+      required: [style, material, color]
+      properties:
+        style: {type: string, description: Lens style id from List Lens Styles.}
+        material: {type: string, description: Lens material id from List Lens Materials.}
+        color: {type: string, description: Lens color id from List Lens Addons colors.}
+        coats: {type: array, items: {type: string}, description: Coat ids from List Lens Addons.}
+        tint: {type: string, description: One of tints from List Lens Addons.}
+        tint_instruction: {type: string, maxLength: 250, description: Required when tint is provided.}
+    RedoData:
+      type: object
+      required: [type, reason, reference]
+      properties:
+        type: {type: string, description: One of redo_types from Retrieve Order Settings.}
+        reason: {type: string, maxLength: 250}
+        reference: {type: string, description: Identifier for the order being redone.}
+    CreateOrderRequest:
+      type: object
+      required: [mode, submission_type, order_type, lab, account_number, patient, frame]
+      properties:
+        mode:
+          type: string
+          enum: [draft, submit]
+          description: Save as draft or submit to the lab.
+        submission_type:
+          type: string
+          enum: [new, redo, multi_pair]
+        order_type:
+          type: string
+          description: 'One of order_types from Retrieve Order Settings; rx is always available.'
+        lab: {type: string, description: The ID of the lab.}
+        account_number: {type: string}
+        patient: {$ref: '#/components/schemas/Patient'}
+        mounting_option: {type: string, description: One of mounting_options. Required when order_type is rx.}
+        lens: {$ref: '#/components/schemas/Lens'}
+        frame: {$ref: '#/components/schemas/Frame'}
+        rx: {$ref: '#/components/schemas/Rx'}
+        services: {type: array, items: {type: string}, description: Lab services from Retrieve Order Settings.}
+        special_instructions: {type: string, maxLength: 1000}
+        redo_data: {$ref: '#/components/schemas/RedoData'}
+        multi_pair_data: {type: object, description: Details for a multi-pair order. Required when submission_type is multi_pair.}
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          required: [type, message]
+          properties:
+            type:
+              type: string
+              enum: [invalid_request_error, authentication_error, permission_error, api_error]
+            message: {type: string}
+            code: {type: string, description: Stable machine-readable string, when applicable.}
+            param: {type: string, description: Related input field or header, when applicable.}

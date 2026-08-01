@@ -1,0 +1,38 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.speccheckrx.com/introduction
+format: custom
+envelope:
+  wrapper: error
+  fields:
+    - {name: type, required: true, description: The error category (see error_types).}
+    - {name: message, required: true, description: Human-readable description of what went wrong.}
+    - {name: code, required: false, description: Stable, machine-readable string (e.g. invalid_request).}
+    - {name: param, required: false, description: The related input field or header (e.g. User-Email).}
+  example:
+    error:
+      type: invalid_request_error
+      message: Example message from the API.
+      code: invalid_request
+      param: User-Email
+error_types:
+  - type: invalid_request_error
+    http_status: 400
+    meaning: Missing or invalid parameters (may also be other 4xx).
+    source_operation: openapi/speccheck-openapi.yml#createOrder
+  - type: authentication_error
+    http_status: 401
+    meaning: Authentication failed.
+    source_operation: openapi/speccheck-openapi.yml#createAccessToken
+  - type: permission_error
+    http_status: 403
+    meaning: Authenticated but not allowed.
+    source_operation: openapi/speccheck-openapi.yml#listOrders
+  - type: api_error
+    http_status: 500
+    meaning: Internal server error.
+    source_operation: openapi/speccheck-openapi.yml#createOrder
+notes: >-
+  Error messages and status codes may vary by endpoint. Always use the `error`
+  object together with the HTTP status when handling failures. `code` and `param`
+  are omitted when not applicable.

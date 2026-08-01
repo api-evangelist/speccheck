@@ -1,0 +1,11 @@
+generated: '2026-07-21'
+method: generated
+skills:
+  - file: speccheck-create-rx-order.md
+    name: Create a prescription (rx) order with SpecCheck
+    api: openapi/speccheck-openapi.yml
+    operations: [createAccessToken, listLabs, retrieveOrderSettings, listLensStyles, listLensMaterials, listLensAddons, createOrder]
+  - file: speccheck-list-orders.md
+    name: List and page through SpecCheck orders
+    api: openapi/speccheck-openapi.yml
+    operations: [createAccessToken, listLabs, listOrders]

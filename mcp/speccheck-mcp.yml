@@ -1,0 +1,37 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: openapi/speccheck-openapi.yml
+server:
+  name: speccheck
+  transport: http
+  url: null
+notes: >-
+  No official hosted MCP server was found for SpecCheck. The following tool list
+  is a candidate derived one-to-one from the OpenAPI operations to seed a future
+  MCP server; it is not published by SpecCheck.
+tools:
+  - name: create_access_token
+    description: Create a bearer token from client credentials.
+    source_operation: openapi/speccheck-openapi.yml#createAccessToken
+  - name: list_labs
+    description: List the labs associated with a user.
+    source_operation: openapi/speccheck-openapi.yml#listLabs
+  - name: retrieve_order_settings
+    description: Retrieve order configuration options for a lab.
+    source_operation: openapi/speccheck-openapi.yml#retrieveOrderSettings
+  - name: list_lens_styles
+    description: List lens styles for a lab and lens type.
+    source_operation: openapi/speccheck-openapi.yml#listLensStyles
+  - name: list_lens_materials
+    description: List lens materials for a lab and lens style.
+    source_operation: openapi/speccheck-openapi.yml#listLensMaterials
+  - name: list_lens_addons
+    description: List lens add-ons (coats, colors, tints) for a lab, style, and material.
+    source_operation: openapi/speccheck-openapi.yml#listLensAddons
+  - name: list_orders
+    description: List orders for a lab with cursor pagination.
+    source_operation: openapi/speccheck-openapi.yml#listOrders
+  - name: create_order
+    description: Create a draft or submitted optical order.
+    source_operation: openapi/speccheck-openapi.yml#createOrder

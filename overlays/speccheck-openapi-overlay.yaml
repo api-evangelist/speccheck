@@ -1,0 +1,25 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for SpecCheck
+  version: 1.0.0
+extends: openapi/speccheck-openapi.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-rating: 3
+      x-apievangelist-notes: >-
+        Reconstructed from public docs at docs.speccheckrx.com. Bearer auth via
+        client-credentials token exchange, Idempotency-Key on POST, cursor
+        pagination on list endpoints, custom error envelope.
+  - target: $.info
+    update:
+      x-idempotency:
+        header: Idempotency-Key
+        scope: all POST
+      x-pagination:
+        style: cursor
+        params: [starting_after, ending_before, limit]
+  - target: $.paths['/v1/orders'].post
+    update:
+      x-agentic-consequence: physical
+      x-apievangelist-note: Creating a submitted order dispatches a real optical lab job.

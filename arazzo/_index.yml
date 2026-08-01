@@ -1,0 +1,14 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/speccheck-openapi.yml
+workflows:
+  - file: speccheck-create-rx-order.yml
+    workflowId: create-rx-order
+    title: Create a prescription (rx) order
+    summary: >-
+      Authenticate, resolve the lab + order settings, walk the lens catalog
+      (styles, materials, add-ons), and submit an rx order.
+  - file: speccheck-list-recent-orders.yml
+    workflowId: list-recent-orders
+    title: List recent orders for a lab
+    summary: Authenticate, resolve the lab, and page recent orders with cursor pagination.

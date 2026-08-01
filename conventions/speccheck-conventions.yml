@@ -1,0 +1,53 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.speccheckrx.com/introduction
+docs: https://docs.speccheckrx.com/introduction
+authentication:
+  style: bearer-token
+  token_endpoint: POST /v1/oauth/token
+  credentials: client_id + client_secret
+  token_ttl: 24 hours
+  actor_header: User-Email
+  notes: >-
+    Every authenticated request also requires a `User-Email` header identifying
+    the acting SpecCheck Dashboard user; it must exactly match the login email.
+  ref: authentication/speccheck-authentication.yml
+idempotency:
+  supported: true
+  header: Idempotency-Key
+  scope: All POST requests (e.g. POST /v1/orders)
+  key_format: Up to 255 characters; a v4 UUID is recommended
+  retention: >-
+    The API stores the status code and body of the first request per key and
+    replays it for subsequent requests with the same key.
+  conflict_behavior: >-
+    Incoming parameters are compared to the original request; a mismatch on the
+    same key returns an error to prevent accidental misuse.
+  guidance: Do not use sensitive data (emails, patient identifiers) as keys. GET requests ignore idempotency keys.
+pagination:
+  style: cursor
+  request_params: [starting_after, ending_before, limit]
+  limit: {min: 1, max: 100, default: 10}
+  response_fields: [data, has_more]
+  cursor_basis: object ID (e.g. an order id)
+  applies_to: [listOrders]
+filtering:
+  date_intervals:
+    field: created
+    operators: [gt, gte, lt, lte]
+    encoding: 'bracketed query params, e.g. created[gte]=<unix_ts>'
+    value: integer Unix timestamp (seconds)
+versioning:
+  scheme: uri-path
+  current: v1
+  ref: lifecycle/speccheck-lifecycle.yml
+timestamps:
+  format: integer Unix epoch seconds
+  fields: [created, updated]
+error_envelope:
+  shape: '{ "error": { "type", "message", "code?", "param?" } }'
+  format: custom (not RFC 9457)
+  ref: errors/speccheck-problem-types.yml
+rate_limiting:
+  documented: false
+  notes: No rate-limit headers or policy documented in public docs as of capture.

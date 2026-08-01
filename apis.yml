@@ -1,27 +1,158 @@
 aid: speccheck
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/speccheck.png
 name: SpecCheck
-description: 'SpecCheck is a company surfaced as a portfolio company of initialized-capital and added
-  to the API Evangelist network as a stub for enrichment. Sector: enterprise-saas. This profile is a lead
-  awaiting the enrichment pipeline.'
+description: >-
+  SpecCheck (speccheckrx.com) is an optical lab ordering platform for eyecare
+  practices and eyewear partners. Its REST API lets integrators authenticate
+  with client credentials, list the labs a user is associated with, retrieve a
+  lab's order settings, browse the lens catalog (styles, materials, and add-on
+  coats, colors, and tints), and create prescription (rx), frame, redo, and
+  multi-pair orders. The API uses 24-hour bearer tokens plus a User-Email actor
+  header, an Idempotency-Key header for safe POST retries, cursor pagination on
+  list endpoints, and a consistent error envelope. SpecCheck was surfaced as a
+  portfolio company of Initialized Capital and enriched by the API Evangelist
+  pipeline from its public documentation at docs.speccheckrx.com.
 url: https://raw.githubusercontent.com/api-evangelist/speccheck/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - initialized-capital
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profiled
+x-tier-reason: enriched-from-docs
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
 - Enterprise Saas
-apis: []
+- Optical
+- Eyewear
+- Eyecare
+- Optical Labs
+- Prescriptions
+- Ordering
+- Healthcare
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: speccheck:speccheck-authentication-api
+  name: SpecCheck Authentication API
+  description: Obtain bearer access tokens.
+  humanURL: https://docs.speccheckrx.com/introduction
+  baseURL: https://api.speccheckrx.com
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/speccheck-authentication-api-openapi.yml
+  - type: Authentication
+    url: authentication/speccheck-authentication.yml
+- aid: speccheck:speccheck-catalogs-api
+  name: SpecCheck Catalogs API
+  description: Lens styles, materials, and add-ons available for a lab.
+  humanURL: https://docs.speccheckrx.com/introduction
+  baseURL: https://api.speccheckrx.com
+  tags:
+  - Catalogs
+  properties:
+  - type: OpenAPI
+    url: openapi/speccheck-catalogs-api-openapi.yml
+  - type: Authentication
+    url: authentication/speccheck-authentication.yml
+- aid: speccheck:speccheck-labs-api
+  name: SpecCheck Labs API
+  description: Labs associated with a user and their order settings.
+  humanURL: https://docs.speccheckrx.com/introduction
+  baseURL: https://api.speccheckrx.com
+  tags:
+  - Labs
+  properties:
+  - type: OpenAPI
+    url: openapi/speccheck-labs-api-openapi.yml
+  - type: Authentication
+    url: authentication/speccheck-authentication.yml
+- aid: speccheck:speccheck-orders-api
+  name: SpecCheck Orders API
+  description: Create and list optical orders.
+  humanURL: https://docs.speccheckrx.com/introduction
+  baseURL: https://api.speccheckrx.com
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/speccheck-orders-api-openapi.yml
+  - type: Authentication
+    url: authentication/speccheck-authentication.yml
 common:
+- type: DeveloperPortal
+  url: https://docs.speccheckrx.com/
+- type: Documentation
+  url: https://docs.speccheckrx.com/introduction
+- type: APIReference
+  url: https://docs.speccheckrx.com/api-reference/endpoint/create_order
+- type: GettingStarted
+  url: https://docs.speccheckrx.com/introduction
+- type: Login
+  url: https://dashboard.speccheckrx.com/
+- type: StatusPage
+  url: https://status.speccheckrx.com/
+- type: OpenAPI
+  url: openapi/speccheck-openapi.yml
+- type: Authentication
+  url: authentication/speccheck-authentication.yml
+- type: Conventions
+  url: conventions/speccheck-conventions.yml
+- type: Idempotency
+  url: conventions/speccheck-conventions.yml
+- type: ErrorCatalog
+  url: errors/speccheck-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/speccheck-lifecycle.yml
+- type: Sandbox
+  url: sandbox/speccheck-sandbox.yml
+- type: DataModel
+  url: data-model/speccheck-data-model.yml
+- type: Conformance
+  url: conformance/speccheck-conformance.yml
+- type: MCPServer
+  url: mcp/speccheck-mcp.yml
+- type: LLMsTxt
+  url: llms/speccheck-llms.txt
+- type: Overlay
+  url: overlays/speccheck-openapi-overlay.yaml
+- type: WellKnown
+  url: well-known/speccheck-well-known.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: AgenticAccess
+  url: agentic-access/speccheck-agentic-access.yml
+- type: DomainSecurity
+  url: security/speccheck-domain-security.yml
+- type: Arazzo
+  name: Create a prescription (rx) order
+  url: arazzo/speccheck-create-rx-order.yml
+- type: Arazzo
+  name: List recent orders for a lab
+  url: arazzo/speccheck-list-recent-orders.yml
 - type: Website
   url: https://speccheckrx.com/
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 3
+  pass: local-v1

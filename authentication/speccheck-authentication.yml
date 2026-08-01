@@ -1,0 +1,14 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/speccheck-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: Bearer token obtained from POST /v1/oauth/token using client credentials. Tokens
+    expire after 24 hours.
+  sources:
+  - openapi/speccheck-openapi.yml

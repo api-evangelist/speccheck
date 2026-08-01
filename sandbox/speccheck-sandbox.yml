@@ -1,0 +1,26 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.speccheckrx.com/introduction
+environments:
+  - name: staging
+    base_url: https://api-staging.speccheckrx.com
+    purpose: Testing and development.
+    credentials: >-
+      Use the client_id and client_secret issued for the staging environment
+      (distinct from production credentials).
+  - name: production
+    base_url: https://api.speccheckrx.com
+    purpose: Live deployments.
+    credentials: Use production client_id and client_secret.
+separation:
+  mechanism: environment-scoped client credentials + separate base host
+  guidance: >-
+    Make sure you are using the correct client_id and client_secret for the
+    environment you are targeting.
+test_values:
+  documented: false
+  notes: >-
+    SpecCheck does not publish fixed magic test identifiers (test cards, test
+    IDs) in its public docs. The staging host is the sandbox; test labs,
+    account numbers, and catalog IDs are provisioned per account rather than
+    published. No test values are fabricated here.

@@ -1,0 +1,13 @@
+# SpecCheck Documentation
+
+## Docs
+
+- [Create Access Token](https://docs.speccheckrx.com/api-reference/endpoint/create_access_token.md): Creates a bearer token for API authentication.
+- [Create Order](https://docs.speccheckrx.com/api-reference/endpoint/create_order.md): Creates an order for a user.
+- [List Labs](https://docs.speccheckrx.com/api-reference/endpoint/list_labs.md): Returns the labs associated with a user.
+- [List Lens Addons](https://docs.speccheckrx.com/api-reference/endpoint/list_lens_addons.md): Returns lens add-ons for a lab for a given lens style and material.
+- [List Lens Materials](https://docs.speccheckrx.com/api-reference/endpoint/list_lens_materials.md): Returns lens materials for a lab for a given lens style.
+- [List Lens Styles](https://docs.speccheckrx.com/api-reference/endpoint/list_lens_styles.md): Returns lens styles for a lab for a given lens type.
+- [List Orders](https://docs.speccheckrx.com/api-reference/endpoint/list_orders.md): Returns orders for a lab. The orders are returned sorted by creation date, with the most recent orders appearing first.
+- [Retrieve Order Settings](https://docs.speccheckrx.com/api-reference/endpoint/retrieve_order_settings.md): Returns order configuration options for a lab.
+- [Introduction](https://docs.speccheckrx.com/introduction.md): Welcome to SpecCheck's API documentation

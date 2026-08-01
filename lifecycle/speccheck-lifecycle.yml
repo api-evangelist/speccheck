@@ -1,0 +1,24 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.speccheckrx.com/introduction
+versioning:
+  scheme: uri-path
+  current: v1
+  docs: https://docs.speccheckrx.com/introduction
+environments:
+  - {name: production, base_url: 'https://api.speccheckrx.com'}
+  - {name: staging, base_url: 'https://api-staging.speccheckrx.com'}
+status_page: https://status.speccheckrx.com/
+token_lifecycle:
+  access_token_ttl: 24 hours
+  guidance: Request a new token before each API session.
+deprecation:
+  policy_documented: false
+  sunset_header: unknown
+sla:
+  documented: false
+deprecated_operations: []
+notes: >-
+  No public deprecation policy or SLA was found in the documentation as of
+  capture. A hosted status page (BetterStack) is live at
+  status.speccheckrx.com.

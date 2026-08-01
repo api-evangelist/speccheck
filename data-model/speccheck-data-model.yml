@@ -1,0 +1,52 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/speccheck-openapi.yml
+entities:
+  - name: Lab
+    id_prefix: lab_
+    description: An optical lab associated with a user, keyed with an account_number.
+    fields: [id, name, account_number]
+  - name: OrderSettings
+    description: Per-lab configuration (order types, materials, mounting, redo types, services).
+    belongs_to: Lab
+  - name: LensStyle
+    id_prefix: style_
+    fields: [id, name]
+  - name: LensMaterial
+    id_prefix: material_
+    fields: [id, name]
+  - name: Coat
+    id_prefix: coat_
+    fields: [id, name, type]
+  - name: Color
+    id_prefix: color_
+    fields: [id, name]
+  - name: Order
+    id_prefix: ord_
+    fields: [id, tray_number, invoice_number, lab_status, created, updated]
+  - name: Patient
+    description: Embedded in an order; not independently addressable.
+    fields: [first_name, last_name, email, phone_number]
+  - name: Frame
+    description: Embedded frame spec within an order.
+  - name: Lens
+    description: Embedded lens configuration within an rx order.
+  - name: Rx
+    description: Embedded prescription (left_eye / right_eye) within an rx order.
+relationships:
+  - {from: Order, to: Lab, kind: belongs_to, via: lab}
+  - {from: Order, to: Patient, kind: has_one, via: patient}
+  - {from: Order, to: Frame, kind: has_one, via: frame}
+  - {from: Order, to: Lens, kind: has_one, via: lens}
+  - {from: Order, to: Rx, kind: has_one, via: rx}
+  - {from: Lens, to: LensStyle, kind: belongs_to, via: style}
+  - {from: Lens, to: LensMaterial, kind: belongs_to, via: material}
+  - {from: Lens, to: Color, kind: belongs_to, via: color}
+  - {from: Lens, to: Coat, kind: has_many, via: coats}
+  - {from: LensMaterial, to: LensStyle, kind: belongs_to, via: style}
+  - {from: Coat, to: Lab, kind: belongs_to, via: lab}
+  - {from: Order, to: OrderSettings, kind: belongs_to, via: order_type}
+notes: >-
+  Catalog objects (styles, materials, addons) are scoped to a (lab,
+  account_number) pair and drilled down by lens_type -> style -> material ->
+  addons. An rx Order references catalog IDs plus a lab account.
