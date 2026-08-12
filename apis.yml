@@ -112,7 +112,7 @@ common:
 - type: StatusPage
   url: https://status.speccheckrx.com/
 - type: OpenAPI
-  url: openapi/speccheck-openapi.yml
+  url: openapi/_original/speccheck-openapi.yml
 - type: Authentication
   url: authentication/speccheck-authentication.yml
 - type: Conventions
