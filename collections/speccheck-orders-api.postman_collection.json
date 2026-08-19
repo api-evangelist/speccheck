@@ -1,0 +1,780 @@
+{
+  "item": [
+    {
+      "id": "a6f201f6-ae5c-441a-a93c-6e9c6fc9f9a2",
+      "name": "Orders",
+      "description": {
+        "content": "Create and list optical orders.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e5c05959-3958-4c15-8460-37498a75f960",
+          "name": "List Orders",
+          "request": {
+            "name": "List Orders",
+            "description": {
+              "content": "Returns orders for a lab, sorted by creation date with the most recent orders first. Supports cursor pagination via `starting_after` / `ending_before` and a `created` date interval filter.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "orders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "lab",
+                  "value": "<string>",
+                  "description": "(Required) The ID of the lab for this request."
+                },
+                {
+                  "disabled": false,
+                  "key": "account_number",
+                  "value": "<string>",
+                  "description": "(Required) The lab account number for this request."
+                },
+                {
+                  "disabled": false,
+                  "key": "created[gt]",
+                  "value": "<integer>",
+                  "description": "Return orders created after this Unix timestamp (exclusive)."
+                },
+                {
+                  "disabled": false,
+                  "key": "created[gte]",
+                  "value": "<integer>",
+                  "description": "Return orders created at or after this Unix timestamp (inclusive)."
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lt]",
+                  "value": "<integer>",
+                  "description": "Return orders created before this Unix timestamp (exclusive)."
+                },
+                {
+                  "disabled": false,
+                  "key": "created[lte]",
+                  "value": "<integer>",
+                  "description": "Return orders created at or before this Unix timestamp (inclusive)."
+                },
+                {
+                  "disabled": false,
+                  "key": "ending_before",
+                  "value": "<string>",
+                  "description": "Cursor - an object ID to fetch the previous page."
+                },
+                {
+                  "disabled": false,
+                  "key": "starting_after",
+                  "value": "<string>",
+                  "description": "Cursor - an object ID to fetch the next page."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of objects to return (1-100, default 10)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                "key": "User-Email",
+                "value": "<email>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9147ef3e-1170-4f1e-876a-3ba24bba7a3c",
+              "name": "A paginated list of orders.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "lab",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "account_number",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created[gt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                    "key": "User-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"has_more\": false,\n  \"data\": [\n    {\n      \"id\": \"ord_1234\",\n      \"tray_number\": \"1234\",\n      \"invoice_number\": \"1234\",\n      \"lab_status\": \"in_progress\",\n      \"created\": 1710000000,\n      \"updated\": 1710003600\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9690235f-7c56-47ee-b495-3568ef4eebf8",
+              "name": "Authentication failed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "lab",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "account_number",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created[gt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                    "key": "User-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"message\": \"Authentication failed.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "73571a06-0ac8-4095-bd3f-cefe8b06f9bc",
+              "name": "Authenticated but not allowed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "lab",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "account_number",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created[gt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[gte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lt]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created[lte]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "ending_before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "starting_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                    "key": "User-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"permission_error\",\n    \"message\": \"You do not have permission to perform this action.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f14a9839-ba66-4b4e-9f88-54b31e47b8e5",
+          "name": "Create Order",
+          "request": {
+            "name": "Create Order",
+            "description": {
+              "content": "Creates an order for a user, either saved as a draft or submitted to the lab. Supports rx, frame, redo, and multi-pair submissions. Send an `Idempotency-Key` header to safely retry.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "orders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                "key": "User-Email",
+                "value": "<email>"
+              },
+              {
+                "disabled": false,
+                "description": "Unique key (up to 255 chars; a v4 UUID works well) to safely retry a POST without duplicating the operation. Do not use sensitive data as the key.",
+                "key": "Idempotency-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mode\": \"<string>\",\n  \"submission_type\": \"<string>\",\n  \"order_type\": \"<string>\",\n  \"lab\": \"<string>\",\n  \"account_number\": \"<string>\",\n  \"patient\": {\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"email\": \"<email>\",\n    \"phone_number\": \"<string>\"\n  },\n  \"frame\": {\n    \"handling\": \"<string>\",\n    \"manufacturer\": \"<string>\",\n    \"model\": \"<string>\",\n    \"material\": \"<string>\",\n    \"color\": \"<string>\",\n    \"eye_size\": \"<integer>\",\n    \"bridge\": \"<integer>\",\n    \"temple\": \"<integer>\",\n    \"a\": \"<number>\",\n    \"b\": \"<number>\",\n    \"lens_ed\": \"<number>\",\n    \"vertex\": \"<number>\",\n    \"pantoscopic_tilt\": \"<number>\",\n    \"wrap\": \"<number>\",\n    \"sku\": \"<string>\"\n  },\n  \"mounting_option\": \"<string>\",\n  \"lens\": {\n    \"style\": \"<string>\",\n    \"material\": \"<string>\",\n    \"color\": \"<string>\",\n    \"coats\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"tint\": \"<string>\",\n    \"tint_instruction\": \"<string>\"\n  },\n  \"rx\": {\n    \"left_eye\": {\n      \"sphere\": \"<number>\",\n      \"pd\": \"<number>\",\n      \"near_pd\": \"<number>\",\n      \"cylinder\": \"<number>\",\n      \"axis\": \"<integer>\",\n      \"add\": \"<number>\",\n      \"seg_height\": \"<number>\",\n      \"oc_height\": \"<number>\",\n      \"horizontal_prism\": {\n        \"power\": \"<number>\",\n        \"direction\": \"<string>\"\n      },\n      \"vertical_prism\": {\n        \"power\": \"<number>\",\n        \"direction\": \"<string>\"\n      }\n    },\n    \"right_eye\": {\n      \"sphere\": \"<number>\",\n      \"pd\": \"<number>\",\n      \"near_pd\": \"<number>\",\n      \"cylinder\": \"<number>\",\n      \"axis\": \"<integer>\",\n      \"add\": \"<number>\",\n      \"seg_height\": \"<number>\",\n      \"oc_height\": \"<number>\",\n      \"horizontal_prism\": {\n        \"power\": \"<number>\",\n        \"direction\": \"<string>\"\n      },\n      \"vertical_prism\": {\n        \"power\": \"<number>\",\n        \"direction\": \"<string>\"\n      }\n    }\n  },\n  \"services\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"special_instructions\": \"<string>\",\n  \"redo_data\": {\n    \"type\": \"<string>\",\n    \"reason\": \"<string>\",\n    \"reference\": \"<string>\"\n  },\n  \"multi_pair_data\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7c4485cb-d070-4235-b4a6-5c592e4124ea",
+              "name": "The created order.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                    "key": "User-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique key (up to 255 chars; a v4 UUID works well) to safely retry a POST without duplicating the operation. Do not use sensitive data as the key.",
+                    "key": "Idempotency-Key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mode\": \"<string>\",\n  \"submission_type\": \"<string>\",\n  \"order_type\": \"<string>\",\n  \"lab\": \"<string>\",\n  \"account_number\": \"<string>\",\n  \"patient\": {\n    \"first_name\": \"string\",\n    \"last_name\": \"string\",\n    \"email\": \"pt7BqrvXy@sngmNGYqkMLJEfgIuvmfjZEgRz.xcc\",\n    \"phone_number\": \"string\"\n  },\n  \"frame\": {\n    \"handling\": \"string\",\n    \"manufacturer\": \"string\",\n    \"model\": \"string\",\n    \"material\": \"string\",\n    \"color\": \"string\",\n    \"eye_size\": 13,\n    \"bridge\": 64,\n    \"temple\": 142,\n    \"a\": 55.35165714660303,\n    \"b\": 23.86369690672457,\n    \"lens_ed\": 15.14903020797548,\n    \"vertex\": 19.289639723350163,\n    \"pantoscopic_tilt\": -12.121017077526686,\n    \"wrap\": 32.988789829716744,\n    \"sku\": \"string\"\n  },\n  \"mounting_option\": \"<string>\",\n  \"lens\": {\n    \"style\": \"string\",\n    \"material\": \"string\",\n    \"color\": \"string\",\n    \"coats\": [\n      \"string\",\n      \"string\"\n    ],\n    \"tint\": \"string\",\n    \"tint_instruction\": \"string\"\n  },\n  \"rx\": {\n    \"left_eye\": {\n      \"sphere\": 4.652346159607845,\n      \"pd\": 21.405963268933878,\n      \"near_pd\": 22.978566847146105,\n      \"cylinder\": -6.445455313811523,\n      \"axis\": 12,\n      \"add\": 1.151668213696689,\n      \"seg_height\": 30.420613769365207,\n      \"oc_height\": 38.175744630490236,\n      \"horizontal_prism\": {\n        \"power\": 12.45009767784768,\n        \"direction\": \"string\"\n      },\n      \"vertical_prism\": {\n        \"power\": 14.35098849856669,\n        \"direction\": \"string\"\n      }\n    },\n    \"right_eye\": {\n      \"sphere\": 5.810434903748337,\n      \"pd\": 22.100855235385378,\n      \"near_pd\": 49.11465232769082,\n      \"cylinder\": 5.76812164802638,\n      \"axis\": 158,\n      \"add\": 1.102729827837639,\n      \"seg_height\": 7.543152052367301,\n      \"oc_height\": 44.3085679171603,\n      \"horizontal_prism\": {\n        \"power\": 32.44464886707586,\n        \"direction\": \"string\"\n      },\n      \"vertical_prism\": {\n        \"power\": 15.917021639721039,\n        \"direction\": \"string\"\n      }\n    }\n  },\n  \"services\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"special_instructions\": \"<string>\",\n  \"redo_data\": {\n    \"type\": \"string\",\n    \"reason\": \"string\",\n    \"reference\": \"string\"\n  },\n  \"multi_pair_data\": \"<object>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"tray_number\": \"string\",\n  \"invoice_number\": \"string\",\n  \"lab_status\": \"string\",\n  \"created\": 7566,\n  \"updated\": 9553\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6d26c4a1-bfbe-44fc-b48d-4b9f09b2d8fa",
+              "name": "Missing or invalid parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                    "key": "User-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique key (up to 255 chars; a v4 UUID works well) to safely retry a POST without duplicating the operation. Do not use sensitive data as the key.",
+                    "key": "Idempotency-Key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mode\": \"<string>\",\n  \"submission_type\": \"<string>\",\n  \"order_type\": \"<string>\",\n  \"lab\": \"<string>\",\n  \"account_number\": \"<string>\",\n  \"patient\": {\n    \"first_name\": \"string\",\n    \"last_name\": \"string\",\n    \"email\": \"pt7BqrvXy@sngmNGYqkMLJEfgIuvmfjZEgRz.xcc\",\n    \"phone_number\": \"string\"\n  },\n  \"frame\": {\n    \"handling\": \"string\",\n    \"manufacturer\": \"string\",\n    \"model\": \"string\",\n    \"material\": \"string\",\n    \"color\": \"string\",\n    \"eye_size\": 13,\n    \"bridge\": 64,\n    \"temple\": 142,\n    \"a\": 55.35165714660303,\n    \"b\": 23.86369690672457,\n    \"lens_ed\": 15.14903020797548,\n    \"vertex\": 19.289639723350163,\n    \"pantoscopic_tilt\": -12.121017077526686,\n    \"wrap\": 32.988789829716744,\n    \"sku\": \"string\"\n  },\n  \"mounting_option\": \"<string>\",\n  \"lens\": {\n    \"style\": \"string\",\n    \"material\": \"string\",\n    \"color\": \"string\",\n    \"coats\": [\n      \"string\",\n      \"string\"\n    ],\n    \"tint\": \"string\",\n    \"tint_instruction\": \"string\"\n  },\n  \"rx\": {\n    \"left_eye\": {\n      \"sphere\": 4.652346159607845,\n      \"pd\": 21.405963268933878,\n      \"near_pd\": 22.978566847146105,\n      \"cylinder\": -6.445455313811523,\n      \"axis\": 12,\n      \"add\": 1.151668213696689,\n      \"seg_height\": 30.420613769365207,\n      \"oc_height\": 38.175744630490236,\n      \"horizontal_prism\": {\n        \"power\": 12.45009767784768,\n        \"direction\": \"string\"\n      },\n      \"vertical_prism\": {\n        \"power\": 14.35098849856669,\n        \"direction\": \"string\"\n      }\n    },\n    \"right_eye\": {\n      \"sphere\": 5.810434903748337,\n      \"pd\": 22.100855235385378,\n      \"near_pd\": 49.11465232769082,\n      \"cylinder\": 5.76812164802638,\n      \"axis\": 158,\n      \"add\": 1.102729827837639,\n      \"seg_height\": 7.543152052367301,\n      \"oc_height\": 44.3085679171603,\n      \"horizontal_prism\": {\n        \"power\": 32.44464886707586,\n        \"direction\": \"string\"\n      },\n      \"vertical_prism\": {\n        \"power\": 15.917021639721039,\n        \"direction\": \"string\"\n      }\n    }\n  },\n  \"services\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"special_instructions\": \"<string>\",\n  \"redo_data\": {\n    \"type\": \"string\",\n    \"reason\": \"string\",\n    \"reference\": \"string\"\n  },\n  \"multi_pair_data\": \"<object>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"message\": \"Example message from the API.\",\n    \"code\": \"invalid_request\",\n    \"param\": \"User-Email\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2f0bd3c9-30bd-4f60-a290-137c1273efa2",
+              "name": "Authentication failed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                    "key": "User-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique key (up to 255 chars; a v4 UUID works well) to safely retry a POST without duplicating the operation. Do not use sensitive data as the key.",
+                    "key": "Idempotency-Key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mode\": \"<string>\",\n  \"submission_type\": \"<string>\",\n  \"order_type\": \"<string>\",\n  \"lab\": \"<string>\",\n  \"account_number\": \"<string>\",\n  \"patient\": {\n    \"first_name\": \"string\",\n    \"last_name\": \"string\",\n    \"email\": \"pt7BqrvXy@sngmNGYqkMLJEfgIuvmfjZEgRz.xcc\",\n    \"phone_number\": \"string\"\n  },\n  \"frame\": {\n    \"handling\": \"string\",\n    \"manufacturer\": \"string\",\n    \"model\": \"string\",\n    \"material\": \"string\",\n    \"color\": \"string\",\n    \"eye_size\": 13,\n    \"bridge\": 64,\n    \"temple\": 142,\n    \"a\": 55.35165714660303,\n    \"b\": 23.86369690672457,\n    \"lens_ed\": 15.14903020797548,\n    \"vertex\": 19.289639723350163,\n    \"pantoscopic_tilt\": -12.121017077526686,\n    \"wrap\": 32.988789829716744,\n    \"sku\": \"string\"\n  },\n  \"mounting_option\": \"<string>\",\n  \"lens\": {\n    \"style\": \"string\",\n    \"material\": \"string\",\n    \"color\": \"string\",\n    \"coats\": [\n      \"string\",\n      \"string\"\n    ],\n    \"tint\": \"string\",\n    \"tint_instruction\": \"string\"\n  },\n  \"rx\": {\n    \"left_eye\": {\n      \"sphere\": 4.652346159607845,\n      \"pd\": 21.405963268933878,\n      \"near_pd\": 22.978566847146105,\n      \"cylinder\": -6.445455313811523,\n      \"axis\": 12,\n      \"add\": 1.151668213696689,\n      \"seg_height\": 30.420613769365207,\n      \"oc_height\": 38.175744630490236,\n      \"horizontal_prism\": {\n        \"power\": 12.45009767784768,\n        \"direction\": \"string\"\n      },\n      \"vertical_prism\": {\n        \"power\": 14.35098849856669,\n        \"direction\": \"string\"\n      }\n    },\n    \"right_eye\": {\n      \"sphere\": 5.810434903748337,\n      \"pd\": 22.100855235385378,\n      \"near_pd\": 49.11465232769082,\n      \"cylinder\": 5.76812164802638,\n      \"axis\": 158,\n      \"add\": 1.102729827837639,\n      \"seg_height\": 7.543152052367301,\n      \"oc_height\": 44.3085679171603,\n      \"horizontal_prism\": {\n        \"power\": 32.44464886707586,\n        \"direction\": \"string\"\n      },\n      \"vertical_prism\": {\n        \"power\": 15.917021639721039,\n        \"direction\": \"string\"\n      }\n    }\n  },\n  \"services\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"special_instructions\": \"<string>\",\n  \"redo_data\": {\n    \"type\": \"string\",\n    \"reason\": \"string\",\n    \"reference\": \"string\"\n  },\n  \"multi_pair_data\": \"<object>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"message\": \"Authentication failed.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "20800ac8-3efa-4dc3-a8ae-5f9ae5d08a8c",
+              "name": "Authenticated but not allowed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                    "key": "User-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique key (up to 255 chars; a v4 UUID works well) to safely retry a POST without duplicating the operation. Do not use sensitive data as the key.",
+                    "key": "Idempotency-Key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mode\": \"<string>\",\n  \"submission_type\": \"<string>\",\n  \"order_type\": \"<string>\",\n  \"lab\": \"<string>\",\n  \"account_number\": \"<string>\",\n  \"patient\": {\n    \"first_name\": \"string\",\n    \"last_name\": \"string\",\n    \"email\": \"pt7BqrvXy@sngmNGYqkMLJEfgIuvmfjZEgRz.xcc\",\n    \"phone_number\": \"string\"\n  },\n  \"frame\": {\n    \"handling\": \"string\",\n    \"manufacturer\": \"string\",\n    \"model\": \"string\",\n    \"material\": \"string\",\n    \"color\": \"string\",\n    \"eye_size\": 13,\n    \"bridge\": 64,\n    \"temple\": 142,\n    \"a\": 55.35165714660303,\n    \"b\": 23.86369690672457,\n    \"lens_ed\": 15.14903020797548,\n    \"vertex\": 19.289639723350163,\n    \"pantoscopic_tilt\": -12.121017077526686,\n    \"wrap\": 32.988789829716744,\n    \"sku\": \"string\"\n  },\n  \"mounting_option\": \"<string>\",\n  \"lens\": {\n    \"style\": \"string\",\n    \"material\": \"string\",\n    \"color\": \"string\",\n    \"coats\": [\n      \"string\",\n      \"string\"\n    ],\n    \"tint\": \"string\",\n    \"tint_instruction\": \"string\"\n  },\n  \"rx\": {\n    \"left_eye\": {\n      \"sphere\": 4.652346159607845,\n      \"pd\": 21.405963268933878,\n      \"near_pd\": 22.978566847146105,\n      \"cylinder\": -6.445455313811523,\n      \"axis\": 12,\n      \"add\": 1.151668213696689,\n      \"seg_height\": 30.420613769365207,\n      \"oc_height\": 38.175744630490236,\n      \"horizontal_prism\": {\n        \"power\": 12.45009767784768,\n        \"direction\": \"string\"\n      },\n      \"vertical_prism\": {\n        \"power\": 14.35098849856669,\n        \"direction\": \"string\"\n      }\n    },\n    \"right_eye\": {\n      \"sphere\": 5.810434903748337,\n      \"pd\": 22.100855235385378,\n      \"near_pd\": 49.11465232769082,\n      \"cylinder\": 5.76812164802638,\n      \"axis\": 158,\n      \"add\": 1.102729827837639,\n      \"seg_height\": 7.543152052367301,\n      \"oc_height\": 44.3085679171603,\n      \"horizontal_prism\": {\n        \"power\": 32.44464886707586,\n        \"direction\": \"string\"\n      },\n      \"vertical_prism\": {\n        \"power\": 15.917021639721039,\n        \"direction\": \"string\"\n      }\n    }\n  },\n  \"services\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"special_instructions\": \"<string>\",\n  \"redo_data\": {\n    \"type\": \"string\",\n    \"reason\": \"string\",\n    \"reference\": \"string\"\n  },\n  \"multi_pair_data\": \"<object>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"permission_error\",\n    \"message\": \"You do not have permission to perform this action.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5bc9b738-04fb-4f92-870b-1b5338c55d6b",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                    "key": "User-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Unique key (up to 255 chars; a v4 UUID works well) to safely retry a POST without duplicating the operation. Do not use sensitive data as the key.",
+                    "key": "Idempotency-Key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mode\": \"<string>\",\n  \"submission_type\": \"<string>\",\n  \"order_type\": \"<string>\",\n  \"lab\": \"<string>\",\n  \"account_number\": \"<string>\",\n  \"patient\": {\n    \"first_name\": \"string\",\n    \"last_name\": \"string\",\n    \"email\": \"pt7BqrvXy@sngmNGYqkMLJEfgIuvmfjZEgRz.xcc\",\n    \"phone_number\": \"string\"\n  },\n  \"frame\": {\n    \"handling\": \"string\",\n    \"manufacturer\": \"string\",\n    \"model\": \"string\",\n    \"material\": \"string\",\n    \"color\": \"string\",\n    \"eye_size\": 13,\n    \"bridge\": 64,\n    \"temple\": 142,\n    \"a\": 55.35165714660303,\n    \"b\": 23.86369690672457,\n    \"lens_ed\": 15.14903020797548,\n    \"vertex\": 19.289639723350163,\n    \"pantoscopic_tilt\": -12.121017077526686,\n    \"wrap\": 32.988789829716744,\n    \"sku\": \"string\"\n  },\n  \"mounting_option\": \"<string>\",\n  \"lens\": {\n    \"style\": \"string\",\n    \"material\": \"string\",\n    \"color\": \"string\",\n    \"coats\": [\n      \"string\",\n      \"string\"\n    ],\n    \"tint\": \"string\",\n    \"tint_instruction\": \"string\"\n  },\n  \"rx\": {\n    \"left_eye\": {\n      \"sphere\": 4.652346159607845,\n      \"pd\": 21.405963268933878,\n      \"near_pd\": 22.978566847146105,\n      \"cylinder\": -6.445455313811523,\n      \"axis\": 12,\n      \"add\": 1.151668213696689,\n      \"seg_height\": 30.420613769365207,\n      \"oc_height\": 38.175744630490236,\n      \"horizontal_prism\": {\n        \"power\": 12.45009767784768,\n        \"direction\": \"string\"\n      },\n      \"vertical_prism\": {\n        \"power\": 14.35098849856669,\n        \"direction\": \"string\"\n      }\n    },\n    \"right_eye\": {\n      \"sphere\": 5.810434903748337,\n      \"pd\": 22.100855235385378,\n      \"near_pd\": 49.11465232769082,\n      \"cylinder\": 5.76812164802638,\n      \"axis\": 158,\n      \"add\": 1.102729827837639,\n      \"seg_height\": 7.543152052367301,\n      \"oc_height\": 44.3085679171603,\n      \"horizontal_prism\": {\n        \"power\": 32.44464886707586,\n        \"direction\": \"string\"\n      },\n      \"vertical_prism\": {\n        \"power\": 15.917021639721039,\n        \"direction\": \"string\"\n      }\n    }\n  },\n  \"services\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"special_instructions\": \"<string>\",\n  \"redo_data\": {\n    \"type\": \"string\",\n    \"reason\": \"string\",\n    \"reference\": \"string\"\n  },\n  \"multi_pair_data\": \"<object>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"api_error\",\n    \"message\": \"Something went wrong.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.speccheckrx.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e6e94f3d-a3f6-4808-8a8c-38fe1afa482e",
+    "name": "SpecCheck Authentication Orders API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "SpecCheck is an optical lab ordering platform. Its REST API lets eyecare practices and partners look up the labs and lens catalogs available to a user, retrieve a lab's order settings, and create prescription (rx), frame, and multi-pair orders programmatically. Authentication uses a bearer token obtained from client credentials, plus a `User-Email` header identifying the acting SpecCheck Dashboard user. POST requests support an `Idempotency-Key` header for safe retries. This specification was reconstructed by API Evangelist from SpecCheck's public documentation at https://docs.speccheckrx.com and is not an official SpecCheck artifact.\n\nContact Support:\n Name: SpecCheck",
+      "type": "text/plain"
+    }
+  }
+}

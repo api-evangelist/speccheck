@@ -1,0 +1,487 @@
+{
+  "item": [
+    {
+      "id": "1701f817-0309-451e-861d-dc1463beb44f",
+      "name": "Labs",
+      "description": {
+        "content": "Labs associated with a user and their order settings.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fb059ab5-96e4-422c-83a3-f0061cde6938",
+          "name": "List Labs",
+          "request": {
+            "name": "List Labs",
+            "description": {
+              "content": "Returns the labs associated with the user identified by the `User-Email` header. If there are no labs, `data` is an empty array.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "labs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                "key": "User-Email",
+                "value": "<email>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "29592c35-2b3e-4149-9568-1c6c5df39b39",
+              "name": "A list of labs for the user.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "labs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                    "key": "User-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"lab_123\",\n      \"name\": \"Acme Lab\",\n      \"account_number\": \"1234567\"\n    },\n    {\n      \"id\": \"lab_456\",\n      \"name\": \"VisionWorks Lab\",\n      \"account_number\": \"7654321\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "20eb9320-c0c0-46b6-9576-c0356b83dc85",
+              "name": "Authentication failed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "labs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                    "key": "User-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"message\": \"Authentication failed.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ba290db-92c9-4d70-a993-13239992b64b",
+              "name": "Authenticated but not allowed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "labs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                    "key": "User-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"permission_error\",\n    \"message\": \"You do not have permission to perform this action.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "31aa8a12-98ee-4bb2-9ba1-3bbf4e73dabc",
+          "name": "Retrieve Order Settings",
+          "request": {
+            "name": "Retrieve Order Settings",
+            "description": {
+              "content": "Returns order configuration options for a lab.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "labs",
+                ":id",
+                "order_settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "account_number",
+                  "value": "<string>",
+                  "description": "(Required) The lab account number for this request."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The ID of the lab."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                "key": "User-Email",
+                "value": "<email>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "29806a1d-009a-4b7f-be9e-e9c93cffa67b",
+              "name": "Order settings for the lab.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "labs",
+                    ":id",
+                    "order_settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "account_number",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the lab."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                    "key": "User-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"frame_handling_options\": [\n    \"Frame to Come\",\n    \"Lenses Only\"\n  ],\n  \"frame_materials\": [\n    \"Metal\",\n    \"Zyl\"\n  ],\n  \"mounting_options\": [\n    \"Edged & Mount\",\n    \"Uncuts Only\"\n  ],\n  \"order_types\": [\n    \"rx\",\n    \"frame\"\n  ],\n  \"redo_types\": [\n    \"Remake\",\n    \"Warranty\"\n  ],\n  \"services\": [\n    \"Roll & Polish Edges\",\n    \"Add/Replace Nose Pads\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d62dfdf3-3a2e-4861-acdf-a8783757db52",
+              "name": "Authentication failed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "labs",
+                    ":id",
+                    "order_settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "account_number",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the lab."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                    "key": "User-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"authentication_error\",\n    \"message\": \"Authentication failed.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "96a33a7b-b6cc-402f-8212-701dcd60883c",
+              "name": "Authenticated but not allowed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "labs",
+                    ":id",
+                    "order_settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "account_number",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the lab."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.",
+                    "key": "User-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"permission_error\",\n    \"message\": \"You do not have permission to perform this action.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.speccheckrx.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ae03c447-763b-431a-b114-6e5598f72a33",
+    "name": "SpecCheck Authentication Labs API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "SpecCheck is an optical lab ordering platform. Its REST API lets eyecare practices and partners look up the labs and lens catalogs available to a user, retrieve a lab's order settings, and create prescription (rx), frame, and multi-pair orders programmatically. Authentication uses a bearer token obtained from client credentials, plus a `User-Email` header identifying the acting SpecCheck Dashboard user. POST requests support an `Idempotency-Key` header for safe retries. This specification was reconstructed by API Evangelist from SpecCheck's public documentation at https://docs.speccheckrx.com and is not an official SpecCheck artifact.\n\nContact Support:\n Name: SpecCheck",
+      "type": "text/plain"
+    }
+  }
+}

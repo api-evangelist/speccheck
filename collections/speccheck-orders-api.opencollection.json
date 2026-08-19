@@ -1,0 +1,122 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SpecCheck Authentication Orders API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Orders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speccheckrx.com/v1/orders",
+            "headers": [
+              {
+                "name": "User-Email",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "lab",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the lab for this request."
+              },
+              {
+                "name": "account_number",
+                "value": "",
+                "type": "query",
+                "description": "The lab account number for this request."
+              },
+              {
+                "name": "created[gt]",
+                "value": "",
+                "type": "query",
+                "description": "Return orders created after this Unix timestamp (exclusive)."
+              },
+              {
+                "name": "created[gte]",
+                "value": "",
+                "type": "query",
+                "description": "Return orders created at or after this Unix timestamp (inclusive)."
+              },
+              {
+                "name": "created[lt]",
+                "value": "",
+                "type": "query",
+                "description": "Return orders created before this Unix timestamp (exclusive)."
+              },
+              {
+                "name": "created[lte]",
+                "value": "",
+                "type": "query",
+                "description": "Return orders created at or before this Unix timestamp (inclusive)."
+              },
+              {
+                "name": "ending_before",
+                "value": "",
+                "type": "query",
+                "description": "Cursor - an object ID to fetch the previous page."
+              },
+              {
+                "name": "starting_after",
+                "value": "",
+                "type": "query",
+                "description": "Cursor - an object ID to fetch the next page."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of objects to return (1-100, default 10)."
+              }
+            ]
+          },
+          "docs": "Returns orders for a lab, sorted by creation date with the most recent orders first. Supports cursor pagination via `starting_after` / `ending_before` and a `created` date interval filter."
+        },
+        {
+          "info": {
+            "name": "Create Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speccheckrx.com/v1/orders",
+            "headers": [
+              {
+                "name": "User-Email",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an order for a user, either saved as a draft or submitted to the lab. Supports rx, frame, redo, and multi-pair submissions. Send an `Idempotency-Key` header to safely retry."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

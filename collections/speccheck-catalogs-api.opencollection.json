@@ -1,0 +1,141 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SpecCheck Authentication Catalogs API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Catalogs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Lens Styles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speccheckrx.com/v1/catalogs/styles",
+            "headers": [
+              {
+                "name": "User-Email",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "lab",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the lab for this request."
+              },
+              {
+                "name": "account_number",
+                "value": "",
+                "type": "query",
+                "description": "The lab account number for this request."
+              },
+              {
+                "name": "lens_type",
+                "value": "",
+                "type": "query",
+                "description": "The type of lens."
+              }
+            ]
+          },
+          "docs": "Returns lens styles for a lab for a given lens type."
+        },
+        {
+          "info": {
+            "name": "List Lens Materials",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speccheckrx.com/v1/catalogs/materials",
+            "headers": [
+              {
+                "name": "User-Email",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "lab",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the lab for this request."
+              },
+              {
+                "name": "account_number",
+                "value": "",
+                "type": "query",
+                "description": "The lab account number for this request."
+              },
+              {
+                "name": "style",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the lens style."
+              }
+            ]
+          },
+          "docs": "Returns lens materials for a lab for a given lens style."
+        },
+        {
+          "info": {
+            "name": "List Lens Addons",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speccheckrx.com/v1/catalogs/addons",
+            "headers": [
+              {
+                "name": "User-Email",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "lab",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the lab for this request."
+              },
+              {
+                "name": "account_number",
+                "value": "",
+                "type": "query",
+                "description": "The lab account number for this request."
+              },
+              {
+                "name": "style",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the lens style."
+              },
+              {
+                "name": "material",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the lens material."
+              }
+            ]
+          },
+          "docs": "Returns lens add-ons (coats, colors, tints) for a lab for a given lens style and material."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

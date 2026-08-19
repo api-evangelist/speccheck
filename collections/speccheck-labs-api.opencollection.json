@@ -1,0 +1,72 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SpecCheck Authentication Labs API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Labs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Labs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speccheckrx.com/v1/labs",
+            "headers": [
+              {
+                "name": "User-Email",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Returns the labs associated with the user identified by the `User-Email` header. If there are no labs, `data` is an empty array."
+        },
+        {
+          "info": {
+            "name": "Retrieve Order Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speccheckrx.com/v1/labs/:id/order_settings",
+            "headers": [
+              {
+                "name": "User-Email",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the lab."
+              },
+              {
+                "name": "account_number",
+                "value": "",
+                "type": "query",
+                "description": "The lab account number for this request."
+              }
+            ]
+          },
+          "docs": "Returns order configuration options for a lab."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
