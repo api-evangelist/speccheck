@@ -1,6 +1,6 @@
-generated: '2026-07-21'
-method: derived
-source: openapi/speccheck-openapi.yml
+x-generated: '2026-07-21'
+x-method: derived
+x-source: openapi/speccheck-openapi.yml
 workflows:
   - file: speccheck-create-rx-order.yml
     workflowId: create-rx-order

@@ -10,170 +10,179 @@ info:
 x-generated-by: api-evangelist enrichment pipeline (derived from openapi/speccheck-openapi.yml)
 x-method: derived
 sourceDescriptions:
-  - name: speccheck
-    url: ../openapi/speccheck-openapi.yml
-    type: openapi
+- name: authenticationApi
+  url: ../openapi/speccheck-authentication-api-openapi.yml
+  type: openapi
+- name: catalogsApi
+  url: ../openapi/speccheck-catalogs-api-openapi.yml
+  type: openapi
+- name: labsApi
+  url: ../openapi/speccheck-labs-api-openapi.yml
+  type: openapi
+- name: ordersApi
+  url: ../openapi/speccheck-orders-api-openapi.yml
+  type: openapi
 workflows:
-  - workflowId: create-rx-order
-    summary: Authenticate, discover lab + catalog, and submit an rx order.
-    description: >-
-      Seeds inputs a fork would supply. SpecCheck publishes no fixed magic test
-      values, so lab/account/catalog IDs are provisioned per account; run against
-      the staging host (api-staging.speccheckrx.com) with staging credentials.
-    inputs:
-      type: object
-      required: [client_id, client_secret, user_email, patient, frame, rx, mounting_option]
-      properties:
-        client_id: {type: string, description: Application client ID.}
-        client_secret: {type: string, description: Application client secret.}
-        user_email: {type: string, format: email, description: Acting SpecCheck Dashboard user email.}
-        lens_type: {type: string, enum: [single_vision, multifocal], default: single_vision}
-        patient: {type: object, description: Patient object (first_name, last_name, ...).}
-        frame: {type: object, description: Frame object per the Frame schema.}
-        rx: {type: object, description: Rx object with left_eye and/or right_eye.}
-        mounting_option: {type: string, description: One of mounting_options from order settings.}
-        special_instructions: {type: string}
-    steps:
-      - stepId: authenticate
-        description: Exchange client credentials for a 24-hour bearer token.
-        operationId: createAccessToken
-        requestBody:
-          contentType: application/json
-          payload:
-            client_id: $inputs.client_id
-            client_secret: $inputs.client_secret
-        outputs:
-          token: $response.body#/token
-      - stepId: list-labs
-        description: Resolve the labs associated with the acting user.
-        operationId: listLabs
-        parameters:
-          - name: Authorization
-            in: header
-            value: Bearer $steps.authenticate.outputs.token
-          - name: User-Email
-            in: header
-            value: $inputs.user_email
-        outputs:
-          lab_id: $response.body#/data/0/id
-          account_number: $response.body#/data/0/account_number
-      - stepId: order-settings
-        description: Retrieve the lab's order configuration options.
-        operationId: retrieveOrderSettings
-        parameters:
-          - name: Authorization
-            in: header
-            value: Bearer $steps.authenticate.outputs.token
-          - name: User-Email
-            in: header
-            value: $inputs.user_email
-          - name: id
-            in: path
-            value: $steps.list-labs.outputs.lab_id
-          - name: account_number
-            in: query
-            value: $steps.list-labs.outputs.account_number
-        outputs:
-          order_types: $response.body#/order_types
-      - stepId: list-styles
-        description: List lens styles available for the lab and lens type.
-        operationId: listLensStyles
-        parameters:
-          - name: Authorization
-            in: header
-            value: Bearer $steps.authenticate.outputs.token
-          - name: User-Email
-            in: header
-            value: $inputs.user_email
-          - name: lab
-            in: query
-            value: $steps.list-labs.outputs.lab_id
-          - name: account_number
-            in: query
-            value: $steps.list-labs.outputs.account_number
-          - name: lens_type
-            in: query
-            value: $inputs.lens_type
-        outputs:
-          style_id: $response.body#/data/0/id
-      - stepId: list-materials
-        description: List lens materials for the chosen style.
-        operationId: listLensMaterials
-        parameters:
-          - name: Authorization
-            in: header
-            value: Bearer $steps.authenticate.outputs.token
-          - name: User-Email
-            in: header
-            value: $inputs.user_email
-          - name: lab
-            in: query
-            value: $steps.list-labs.outputs.lab_id
-          - name: account_number
-            in: query
-            value: $steps.list-labs.outputs.account_number
-          - name: style
-            in: query
-            value: $steps.list-styles.outputs.style_id
-        outputs:
-          material_id: $response.body#/data/0/id
-      - stepId: list-addons
-        description: List coats/colors/tints for the chosen style and material.
-        operationId: listLensAddons
-        parameters:
-          - name: Authorization
-            in: header
-            value: Bearer $steps.authenticate.outputs.token
-          - name: User-Email
-            in: header
-            value: $inputs.user_email
-          - name: lab
-            in: query
-            value: $steps.list-labs.outputs.lab_id
-          - name: account_number
-            in: query
-            value: $steps.list-labs.outputs.account_number
-          - name: style
-            in: query
-            value: $steps.list-styles.outputs.style_id
-          - name: material
-            in: query
-            value: $steps.list-materials.outputs.material_id
-        outputs:
-          color_id: $response.body#/data/colors/0/id
-      - stepId: create-order
-        description: Submit the prescription order to the lab.
-        operationId: createOrder
-        parameters:
-          - name: Authorization
-            in: header
-            value: Bearer $steps.authenticate.outputs.token
-          - name: User-Email
-            in: header
-            value: $inputs.user_email
-          - name: Idempotency-Key
-            in: header
-            value: $inputs.client_id
-        requestBody:
-          contentType: application/json
-          payload:
-            mode: submit
-            submission_type: new
-            order_type: rx
-            lab: $steps.list-labs.outputs.lab_id
-            account_number: $steps.list-labs.outputs.account_number
-            patient: $inputs.patient
-            mounting_option: $inputs.mounting_option
-            frame: $inputs.frame
-            rx: $inputs.rx
-            lens:
-              style: $steps.list-styles.outputs.style_id
-              material: $steps.list-materials.outputs.material_id
-              color: $steps.list-addons.outputs.color_id
-            special_instructions: $inputs.special_instructions
-        outputs:
-          order_id: $response.body#/id
-          lab_status: $response.body#/lab_status
+- workflowId: create-rx-order
+  summary: Authenticate, discover lab + catalog, and submit an rx order.
+  description: >-
+    Seeds inputs a fork would supply. SpecCheck publishes no fixed magic test
+    values, so lab/account/catalog IDs are provisioned per account; run against
+    the staging host (api-staging.speccheckrx.com) with staging credentials.
+  inputs:
+    type: object
+    required: [client_id, client_secret, user_email, patient, frame, rx, mounting_option]
+    properties:
+      client_id: {type: string, description: Application client ID.}
+      client_secret: {type: string, description: Application client secret.}
+      user_email: {type: string, format: email, description: Acting SpecCheck Dashboard user email.}
+      lens_type: {type: string, enum: [single_vision, multifocal], default: single_vision}
+      patient: {type: object, description: Patient object (first_name, last_name: null, '...).': null}
+      frame: {type: object, description: Frame object per the Frame schema.}
+      rx: {type: object, description: Rx object with left_eye and/or right_eye.}
+      mounting_option: {type: string, description: One of mounting_options from order settings.}
+      special_instructions: {type: string}
+  steps:
+  - stepId: authenticate
+    description: Exchange client credentials for a 24-hour bearer token.
+    operationId: createAccessToken
+    requestBody:
+      contentType: application/json
+      payload:
+        client_id: $inputs.client_id
+        client_secret: $inputs.client_secret
     outputs:
-      order_id: $steps.create-order.outputs.order_id
-      lab_status: $steps.create-order.outputs.lab_status
+      token: $response.body#/token
+  - stepId: list-labs
+    description: Resolve the labs associated with the acting user.
+    operationId: listLabs
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $steps.authenticate.outputs.token
+    - name: User-Email
+      in: header
+      value: $inputs.user_email
+    outputs:
+      lab_id: $response.body#/data/0/id
+      account_number: $response.body#/data/0/account_number
+  - stepId: order-settings
+    description: Retrieve the lab's order configuration options.
+    operationId: retrieveOrderSettings
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $steps.authenticate.outputs.token
+    - name: User-Email
+      in: header
+      value: $inputs.user_email
+    - name: id
+      in: path
+      value: $steps.list-labs.outputs.lab_id
+    - name: account_number
+      in: query
+      value: $steps.list-labs.outputs.account_number
+    outputs:
+      order_types: $response.body#/order_types
+  - stepId: list-styles
+    description: List lens styles available for the lab and lens type.
+    operationId: listLensStyles
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $steps.authenticate.outputs.token
+    - name: User-Email
+      in: header
+      value: $inputs.user_email
+    - name: lab
+      in: query
+      value: $steps.list-labs.outputs.lab_id
+    - name: account_number
+      in: query
+      value: $steps.list-labs.outputs.account_number
+    - name: lens_type
+      in: query
+      value: $inputs.lens_type
+    outputs:
+      style_id: $response.body#/data/0/id
+  - stepId: list-materials
+    description: List lens materials for the chosen style.
+    operationId: listLensMaterials
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $steps.authenticate.outputs.token
+    - name: User-Email
+      in: header
+      value: $inputs.user_email
+    - name: lab
+      in: query
+      value: $steps.list-labs.outputs.lab_id
+    - name: account_number
+      in: query
+      value: $steps.list-labs.outputs.account_number
+    - name: style
+      in: query
+      value: $steps.list-styles.outputs.style_id
+    outputs:
+      material_id: $response.body#/data/0/id
+  - stepId: list-addons
+    description: List coats/colors/tints for the chosen style and material.
+    operationId: listLensAddons
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $steps.authenticate.outputs.token
+    - name: User-Email
+      in: header
+      value: $inputs.user_email
+    - name: lab
+      in: query
+      value: $steps.list-labs.outputs.lab_id
+    - name: account_number
+      in: query
+      value: $steps.list-labs.outputs.account_number
+    - name: style
+      in: query
+      value: $steps.list-styles.outputs.style_id
+    - name: material
+      in: query
+      value: $steps.list-materials.outputs.material_id
+    outputs:
+      color_id: $response.body#/data/colors/0/id
+  - stepId: create-order
+    description: Submit the prescription order to the lab.
+    operationId: createOrder
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $steps.authenticate.outputs.token
+    - name: User-Email
+      in: header
+      value: $inputs.user_email
+    - name: Idempotency-Key
+      in: header
+      value: $inputs.client_id
+    requestBody:
+      contentType: application/json
+      payload:
+        mode: submit
+        submission_type: new
+        order_type: rx
+        lab: $steps.list-labs.outputs.lab_id
+        account_number: $steps.list-labs.outputs.account_number
+        patient: $inputs.patient
+        mounting_option: $inputs.mounting_option
+        frame: $inputs.frame
+        rx: $inputs.rx
+        lens:
+          style: $steps.list-styles.outputs.style_id
+          material: $steps.list-materials.outputs.material_id
+          color: $steps.list-addons.outputs.color_id
+        special_instructions: $inputs.special_instructions
+    outputs:
+      order_id: $response.body#/id
+      lab_status: $response.body#/lab_status
+  outputs:
+    order_id: $steps.create-order.outputs.order_id
+    lab_status: $steps.create-order.outputs.lab_status

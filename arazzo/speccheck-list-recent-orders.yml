@@ -9,70 +9,76 @@ info:
 x-generated-by: api-evangelist enrichment pipeline (derived from openapi/speccheck-openapi.yml)
 x-method: derived
 sourceDescriptions:
-  - name: speccheck
-    url: ../openapi/speccheck-openapi.yml
-    type: openapi
+- name: authenticationApi
+  url: ../openapi/speccheck-authentication-api-openapi.yml
+  type: openapi
+- name: labsApi
+  url: ../openapi/speccheck-labs-api-openapi.yml
+  type: openapi
+- name: ordersApi
+  url: ../openapi/speccheck-orders-api-openapi.yml
+  type: openapi
 workflows:
-  - workflowId: list-recent-orders
-    summary: Authenticate, resolve the lab, and list its recent orders.
-    inputs:
-      type: object
-      required: [client_id, client_secret, user_email]
-      properties:
-        client_id: {type: string}
-        client_secret: {type: string}
-        user_email: {type: string, format: email}
-        limit: {type: integer, minimum: 1, maximum: 100, default: 10}
-        created_gte: {type: integer, description: Return orders created at or after this Unix timestamp.}
-    steps:
-      - stepId: authenticate
-        description: Exchange client credentials for a 24-hour bearer token.
-        operationId: createAccessToken
-        requestBody:
-          contentType: application/json
-          payload:
-            client_id: $inputs.client_id
-            client_secret: $inputs.client_secret
-        outputs:
-          token: $response.body#/token
-      - stepId: list-labs
-        description: Resolve the labs associated with the acting user.
-        operationId: listLabs
-        parameters:
-          - name: Authorization
-            in: header
-            value: Bearer $steps.authenticate.outputs.token
-          - name: User-Email
-            in: header
-            value: $inputs.user_email
-        outputs:
-          lab_id: $response.body#/data/0/id
-          account_number: $response.body#/data/0/account_number
-      - stepId: list-orders
-        description: List recent orders for the lab, newest first.
-        operationId: listOrders
-        parameters:
-          - name: Authorization
-            in: header
-            value: Bearer $steps.authenticate.outputs.token
-          - name: User-Email
-            in: header
-            value: $inputs.user_email
-          - name: lab
-            in: query
-            value: $steps.list-labs.outputs.lab_id
-          - name: account_number
-            in: query
-            value: $steps.list-labs.outputs.account_number
-          - name: limit
-            in: query
-            value: $inputs.limit
-          - name: created[gte]
-            in: query
-            value: $inputs.created_gte
-        outputs:
-          orders: $response.body#/data
-          has_more: $response.body#/has_more
+- workflowId: list-recent-orders
+  summary: Authenticate, resolve the lab, and list its recent orders.
+  inputs:
+    type: object
+    required: [client_id, client_secret, user_email]
+    properties:
+      client_id: {type: string}
+      client_secret: {type: string}
+      user_email: {type: string, format: email}
+      limit: {type: integer, minimum: 1, maximum: 100, default: 10}
+      created_gte: {type: integer, description: Return orders created at or after this Unix timestamp.}
+  steps:
+  - stepId: authenticate
+    description: Exchange client credentials for a 24-hour bearer token.
+    operationId: createAccessToken
+    requestBody:
+      contentType: application/json
+      payload:
+        client_id: $inputs.client_id
+        client_secret: $inputs.client_secret
     outputs:
-      orders: $steps.list-orders.outputs.orders
-      has_more: $steps.list-orders.outputs.has_more
+      token: $response.body#/token
+  - stepId: list-labs
+    description: Resolve the labs associated with the acting user.
+    operationId: listLabs
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $steps.authenticate.outputs.token
+    - name: User-Email
+      in: header
+      value: $inputs.user_email
+    outputs:
+      lab_id: $response.body#/data/0/id
+      account_number: $response.body#/data/0/account_number
+  - stepId: list-orders
+    description: List recent orders for the lab, newest first.
+    operationId: listOrders
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $steps.authenticate.outputs.token
+    - name: User-Email
+      in: header
+      value: $inputs.user_email
+    - name: lab
+      in: query
+      value: $steps.list-labs.outputs.lab_id
+    - name: account_number
+      in: query
+      value: $steps.list-labs.outputs.account_number
+    - name: limit
+      in: query
+      value: $inputs.limit
+    - name: created[gte]
+      in: query
+      value: $inputs.created_gte
+    outputs:
+      orders: $response.body#/data
+      has_more: $response.body#/has_more
+  outputs:
+    orders: $steps.list-orders.outputs.orders
+    has_more: $steps.list-orders.outputs.has_more
