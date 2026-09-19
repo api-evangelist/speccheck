@@ -92,6 +92,8 @@ apis:
   humanURL: https://docs.speccheckrx.com/introduction
   baseURL: https://api.speccheckrx.com
   tags:
+  - Catalog
+  tags_raw:
   - Catalogs
   properties:
   - type: OpenAPI
