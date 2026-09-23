@@ -1,10 +1,7 @@
 {
   "provider": "speccheck",
   "sources": [
-    "speccheck-authentication-api-openapi.yml",
-    "speccheck-catalogs-api-openapi.yml",
-    "speccheck-labs-api-openapi.yml",
-    "speccheck-orders-api-openapi.yml"
+    "_original/speccheck-openapi.yml"
   ],
   "outputs": [
     "speccheck-authentication-api-openapi.yml",
@@ -15,6 +12,15 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "speccheck-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "speccheck-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "speccheck-catalogs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "speccheck-labs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "speccheck-orders-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

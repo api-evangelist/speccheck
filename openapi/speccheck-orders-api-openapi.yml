@@ -1,9 +1,9 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: SpecCheck Authentication Orders API
+  title: SpecCheck Orders API
   version: v1
   summary: Optical lab ordering API for eyewear prescriptions, lens catalogs, and orders.
-  description: SpecCheck is an optical lab ordering platform. Its REST API lets eyecare practices and partners look up the labs and lens catalogs available to a user, retrieve a lab's order settings, and create prescription (rx), frame, and multi-pair orders programmatically. Authentication uses a bearer token obtained from client credentials, plus a `User-Email` header identifying the acting SpecCheck Dashboard user. POST requests support an `Idempotency-Key` header for safe retries. This specification was reconstructed by API Evangelist from SpecCheck's public documentation at https://docs.speccheckrx.com and is not an official SpecCheck artifact.
+  description: SpecCheck is an optical lab ordering platform.
   contact:
     name: SpecCheck
     url: https://docs.speccheckrx.com/introduction
@@ -129,158 +129,6 @@ paths:
           $ref: '#/components/responses/ApiError'
 components:
   schemas:
-    CreateOrderRequest:
-      type: object
-      required:
-      - mode
-      - submission_type
-      - order_type
-      - lab
-      - account_number
-      - patient
-      - frame
-      properties:
-        mode:
-          type: string
-          enum:
-          - draft
-          - submit
-          description: Save as draft or submit to the lab.
-        submission_type:
-          type: string
-          enum:
-          - new
-          - redo
-          - multi_pair
-        order_type:
-          type: string
-          description: One of order_types from Retrieve Order Settings; rx is always available.
-        lab:
-          type: string
-          description: The ID of the lab.
-        account_number:
-          type: string
-        patient:
-          $ref: '#/components/schemas/Patient'
-        mounting_option:
-          type: string
-          description: One of mounting_options. Required when order_type is rx.
-        lens:
-          $ref: '#/components/schemas/Lens'
-        frame:
-          $ref: '#/components/schemas/Frame'
-        rx:
-          $ref: '#/components/schemas/Rx'
-        services:
-          type: array
-          items:
-            type: string
-          description: Lab services from Retrieve Order Settings.
-        special_instructions:
-          type: string
-          maxLength: 1000
-        redo_data:
-          $ref: '#/components/schemas/RedoData'
-        multi_pair_data:
-          type: object
-          description: Details for a multi-pair order. Required when submission_type is multi_pair.
-    RedoData:
-      type: object
-      required:
-      - type
-      - reason
-      - reference
-      properties:
-        type:
-          type: string
-          description: One of redo_types from Retrieve Order Settings.
-        reason:
-          type: string
-          maxLength: 250
-        reference:
-          type: string
-          description: Identifier for the order being redone.
-    EyeRx:
-      type: object
-      description: Prescription for one eye.
-      properties:
-        sphere:
-          type: number
-          minimum: -30
-          maximum: 30
-        pd:
-          type: number
-          minimum: 20
-          maximum: 50
-          description: Monocular distance IPD in mm.
-        near_pd:
-          type: number
-          minimum: 20
-          maximum: 50
-          description: Monocular near IPD in mm.
-        cylinder:
-          type: number
-          minimum: -20
-          maximum: 20
-          description: Required when axis is provided.
-        axis:
-          type: integer
-          minimum: 1
-          maximum: 180
-          description: Required when cylinder is provided.
-        add:
-          type: number
-          minimum: 0.5
-          maximum: 5
-          description: Required when seg_height is provided.
-        seg_height:
-          type: number
-          minimum: 0.5
-          maximum: 50
-          description: Required when add is provided.
-        oc_height:
-          type: number
-          minimum: 0.5
-          maximum: 50
-        horizontal_prism:
-          $ref: '#/components/schemas/Prism'
-        vertical_prism:
-          $ref: '#/components/schemas/Prism'
-    Order:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the order.
-        tray_number:
-          type: string
-        invoice_number:
-          type: string
-        lab_status:
-          type: string
-          description: Current status of the order at the lab.
-        created:
-          type: integer
-          description: Creation time
-          seconds since Unix epoch.: null
-        updated:
-          type: integer
-          description: Last update time
-          seconds since Unix epoch.: null
-    Prism:
-      type: object
-      required:
-      - power
-      - direction
-      properties:
-        power:
-          type: number
-          minimum: 0.01
-          maximum: 50
-          description: Prism power in prism diopters.
-        direction:
-          type: string
-          description: in/out for horizontal, up/down for vertical.
     Patient:
       type: object
       required:
@@ -376,6 +224,82 @@ components:
         sku:
           type: string
           maxLength: 50
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the order.
+        tray_number:
+          type: string
+        invoice_number:
+          type: string
+        lab_status:
+          type: string
+          description: Current status of the order at the lab.
+        created:
+          type: integer
+          description: Creation time
+          seconds since Unix epoch.: null
+        updated:
+          type: integer
+          description: Last update time
+          seconds since Unix epoch.: null
+    CreateOrderRequest:
+      type: object
+      required:
+      - mode
+      - submission_type
+      - order_type
+      - lab
+      - account_number
+      - patient
+      - frame
+      properties:
+        mode:
+          type: string
+          enum:
+          - draft
+          - submit
+          description: Save as draft or submit to the lab.
+        submission_type:
+          type: string
+          enum:
+          - new
+          - redo
+          - multi_pair
+        order_type:
+          type: string
+          description: One of order_types from Retrieve Order Settings; rx is always available.
+        lab:
+          type: string
+          description: The ID of the lab.
+        account_number:
+          type: string
+        patient:
+          $ref: '#/components/schemas/Patient'
+        mounting_option:
+          type: string
+          description: One of mounting_options. Required when order_type is rx.
+        lens:
+          $ref: '#/components/schemas/Lens'
+        frame:
+          $ref: '#/components/schemas/Frame'
+        rx:
+          $ref: '#/components/schemas/Rx'
+        services:
+          type: array
+          items:
+            type: string
+          description: Lab services from Retrieve Order Settings.
+        special_instructions:
+          type: string
+          maxLength: 1000
+        redo_data:
+          $ref: '#/components/schemas/RedoData'
+        multi_pair_data:
+          type: object
+          description: Details for a multi-pair order. Required when submission_type is multi_pair.
     Lens:
       type: object
       required:
@@ -430,7 +354,93 @@ components:
               type: string
               description: Related input field or header
               when applicable.: null
+    RedoData:
+      type: object
+      required:
+      - type
+      - reason
+      - reference
+      properties:
+        type:
+          type: string
+          description: One of redo_types from Retrieve Order Settings.
+        reason:
+          type: string
+          maxLength: 250
+        reference:
+          type: string
+          description: Identifier for the order being redone.
+    EyeRx:
+      type: object
+      description: Prescription for one eye.
+      properties:
+        sphere:
+          type: number
+          minimum: -30
+          maximum: 30
+        pd:
+          type: number
+          minimum: 20
+          maximum: 50
+          description: Monocular distance IPD in mm.
+        near_pd:
+          type: number
+          minimum: 20
+          maximum: 50
+          description: Monocular near IPD in mm.
+        cylinder:
+          type: number
+          minimum: -20
+          maximum: 20
+          description: Required when axis is provided.
+        axis:
+          type: integer
+          minimum: 1
+          maximum: 180
+          description: Required when cylinder is provided.
+        add:
+          type: number
+          minimum: 0.5
+          maximum: 5
+          description: Required when seg_height is provided.
+        seg_height:
+          type: number
+          minimum: 0.5
+          maximum: 50
+          description: Required when add is provided.
+        oc_height:
+          type: number
+          minimum: 0.5
+          maximum: 50
+        horizontal_prism:
+          $ref: '#/components/schemas/Prism'
+        vertical_prism:
+          $ref: '#/components/schemas/Prism'
+    Prism:
+      type: object
+      required:
+      - power
+      - direction
+      properties:
+        power:
+          type: number
+          minimum: 0.01
+          maximum: 50
+          description: Prism power in prism diopters.
+        direction:
+          type: string
+          description: in/out for horizontal, up/down for vertical.
   responses:
+    AuthenticationError:
+      description: Authentication failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              type: authentication_error
+              message: Authentication failed.
     PermissionError:
       description: Authenticated but not allowed.
       content:
@@ -463,32 +473,7 @@ components:
             error:
               type: api_error
               message: Something went wrong.
-    AuthenticationError:
-      description: Authentication failed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error:
-              type: authentication_error
-              message: Authentication failed.
   parameters:
-    LabQuery:
-      name: lab
-      in: query
-      required: true
-      description: The ID of the lab for this request.
-      schema:
-        type: string
-    IdempotencyKey:
-      name: Idempotency-Key
-      in: header
-      required: false
-      description: Unique key (up to 255 chars; a v4 UUID works well) to safely retry a POST without duplicating the operation. Do not use sensitive data as the key.
-      schema:
-        type: string
-        maxLength: 255
     UserEmail:
       name: User-Email
       in: header
@@ -504,6 +489,21 @@ components:
       description: The lab account number for this request.
       schema:
         type: string
+    LabQuery:
+      name: lab
+      in: query
+      required: true
+      description: The ID of the lab for this request.
+      schema:
+        type: string
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: false
+      description: Unique key (up to 255 chars; a v4 UUID works well) to safely retry a POST without duplicating the operation. Do not use sensitive data as the key.
+      schema:
+        type: string
+        maxLength: 255
   securitySchemes:
     bearerAuth:
       type: http
