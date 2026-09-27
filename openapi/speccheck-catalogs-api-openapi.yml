@@ -156,18 +156,18 @@ components:
       schema:
         type: string
         format: email
-    AccountNumberQuery:
-      name: account_number
-      in: query
-      required: true
-      description: The lab account number for this request.
-      schema:
-        type: string
     LabQuery:
       name: lab
       in: query
       required: true
       description: The ID of the lab for this request.
+      schema:
+        type: string
+    AccountNumberQuery:
+      name: account_number
+      in: query
+      required: true
+      description: The lab account number for this request.
       schema:
         type: string
   responses:
@@ -192,39 +192,6 @@ components:
               type: permission_error
               message: You do not have permission to perform this action.
   schemas:
-    Color:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-    Coat:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type:
-          - string
-          - 'null'
-          enum:
-          - ar
-          - mirror
-          - scratch
-          - uv
-          - null
-          description: The type of coat. Null when not set.
-    NamedObject:
-      type: object
-      description: A generic id/name catalog object (lens style or material).
-      properties:
-        id:
-          type: string
-        name:
-          type: string
     LensAddons:
       type: object
       properties:
@@ -240,6 +207,14 @@ components:
           type: array
           items:
             type: string
+    NamedObject:
+      type: object
+      description: A generic id/name catalog object (lens style or material).
+      properties:
+        id:
+          type: string
+        name:
+          type: string
     Error:
       type: object
       properties:
@@ -266,6 +241,31 @@ components:
               type: string
               description: Related input field or header
               when applicable.: null
+    Color:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Coat:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type:
+          - string
+          - 'null'
+          enum:
+          - ar
+          - mirror
+          - scratch
+          - uv
+          - null
+          description: The type of coat. Null when not set.
   securitySchemes:
     bearerAuth:
       type: http
