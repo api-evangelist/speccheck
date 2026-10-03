@@ -51,42 +51,13 @@ paths:
         '401':
           $ref: '#/components/responses/AuthenticationError'
 components:
-  responses:
-    AuthenticationError:
-      description: Authentication failed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error:
-              type: authentication_error
-              message: Authentication failed.
-    InvalidRequest:
-      description: Missing or invalid parameters.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error:
-              type: invalid_request_error
-              message: Example message from the API.
-              code: invalid_request
-              param: User-Email
   schemas:
-    CreateAccessTokenRequest:
+    AccessToken:
       type: object
-      required:
-      - client_id
-      - client_secret
       properties:
-        client_id:
+        token:
           type: string
-          description: The client ID that identifies your application.
-        client_secret:
-          type: string
-          description: The client secret for your application.
+          description: Bearer token for the Authorization header. Expires after 24 hours.
     Error:
       type: object
       properties:
@@ -113,12 +84,41 @@ components:
               type: string
               description: Related input field or header
               when applicable.: null
-    AccessToken:
+    CreateAccessTokenRequest:
       type: object
+      required:
+      - client_id
+      - client_secret
       properties:
-        token:
+        client_id:
           type: string
-          description: Bearer token for the Authorization header. Expires after 24 hours.
+          description: The client ID that identifies your application.
+        client_secret:
+          type: string
+          description: The client secret for your application.
+  responses:
+    InvalidRequest:
+      description: Missing or invalid parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              type: invalid_request_error
+              message: Example message from the API.
+              code: invalid_request
+              param: User-Email
+    AuthenticationError:
+      description: Authentication failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              type: authentication_error
+              message: Authentication failed.
   securitySchemes:
     bearerAuth:
       type: http
