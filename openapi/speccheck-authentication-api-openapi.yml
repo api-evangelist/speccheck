@@ -52,6 +52,18 @@ paths:
           $ref: '#/components/responses/AuthenticationError'
 components:
   schemas:
+    CreateAccessTokenRequest:
+      type: object
+      required:
+      - client_id
+      - client_secret
+      properties:
+        client_id:
+          type: string
+          description: The client ID that identifies your application.
+        client_secret:
+          type: string
+          description: The client secret for your application.
     AccessToken:
       type: object
       properties:
@@ -84,19 +96,17 @@ components:
               type: string
               description: Related input field or header
               when applicable.: null
-    CreateAccessTokenRequest:
-      type: object
-      required:
-      - client_id
-      - client_secret
-      properties:
-        client_id:
-          type: string
-          description: The client ID that identifies your application.
-        client_secret:
-          type: string
-          description: The client secret for your application.
   responses:
+    AuthenticationError:
+      description: Authentication failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              type: authentication_error
+              message: Authentication failed.
     InvalidRequest:
       description: Missing or invalid parameters.
       content:
@@ -109,16 +119,6 @@ components:
               message: Example message from the API.
               code: invalid_request
               param: User-Email
-    AuthenticationError:
-      description: Authentication failed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error:
-              type: authentication_error
-              message: Authentication failed.
   securitySchemes:
     bearerAuth:
       type: http

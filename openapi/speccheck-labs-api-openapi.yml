@@ -105,7 +105,28 @@ paths:
         '403':
           $ref: '#/components/responses/PermissionError'
 components:
+  parameters:
+    UserEmail:
+      name: User-Email
+      in: header
+      required: true
+      description: Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.
+      schema:
+        type: string
+        format: email
   schemas:
+    Lab:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the lab.
+        name:
+          type: string
+          description: The name of the lab.
+        account_number:
+          type: string
+          description: The lab account number.
     Error:
       type: object
       properties:
@@ -132,18 +153,6 @@ components:
               type: string
               description: Related input field or header
               when applicable.: null
-    Lab:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the lab.
-        name:
-          type: string
-          description: The name of the lab.
-        account_number:
-          type: string
-          description: The lab account number.
     OrderSettings:
       type: object
       properties:
@@ -171,26 +180,7 @@ components:
           type: array
           items:
             type: string
-  parameters:
-    UserEmail:
-      name: User-Email
-      in: header
-      required: true
-      description: Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.
-      schema:
-        type: string
-        format: email
   responses:
-    PermissionError:
-      description: Authenticated but not allowed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error:
-              type: permission_error
-              message: You do not have permission to perform this action.
     AuthenticationError:
       description: Authentication failed.
       content:
@@ -201,6 +191,16 @@ components:
             error:
               type: authentication_error
               message: Authentication failed.
+    PermissionError:
+      description: Authenticated but not allowed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              type: permission_error
+              message: You do not have permission to perform this action.
   securitySchemes:
     bearerAuth:
       type: http

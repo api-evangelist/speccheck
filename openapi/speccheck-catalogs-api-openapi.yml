@@ -147,25 +147,53 @@ paths:
         '403':
           $ref: '#/components/responses/PermissionError'
 components:
+  parameters:
+    UserEmail:
+      name: User-Email
+      in: header
+      required: true
+      description: Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.
+      schema:
+        type: string
+        format: email
+    LabQuery:
+      name: lab
+      in: query
+      required: true
+      description: The ID of the lab for this request.
+      schema:
+        type: string
+    AccountNumberQuery:
+      name: account_number
+      in: query
+      required: true
+      description: The lab account number for this request.
+      schema:
+        type: string
   schemas:
-    Coat:
+    LensAddons:
       type: object
+      properties:
+        coats:
+          type: array
+          items:
+            $ref: '#/components/schemas/Coat'
+        colors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Color'
+        tints:
+          type: array
+          items:
+            type: string
+    NamedObject:
+      type: object
+      description: A generic id/name catalog object (lens style or material).
       properties:
         id:
           type: string
         name:
           type: string
-        type:
-          type:
-          - string
-          - 'null'
-          enum:
-          - ar
-          - mirror
-          - scratch
-          - uv
-          - null
-          description: The type of coat. Null when not set.
     Error:
       type: object
       properties:
@@ -199,63 +227,25 @@ components:
           type: string
         name:
           type: string
-    LensAddons:
+    Coat:
       type: object
-      properties:
-        coats:
-          type: array
-          items:
-            $ref: '#/components/schemas/Coat'
-        colors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Color'
-        tints:
-          type: array
-          items:
-            type: string
-    NamedObject:
-      type: object
-      description: A generic id/name catalog object (lens style or material).
       properties:
         id:
           type: string
         name:
           type: string
-  parameters:
-    LabQuery:
-      name: lab
-      in: query
-      required: true
-      description: The ID of the lab for this request.
-      schema:
-        type: string
-    AccountNumberQuery:
-      name: account_number
-      in: query
-      required: true
-      description: The lab account number for this request.
-      schema:
-        type: string
-    UserEmail:
-      name: User-Email
-      in: header
-      required: true
-      description: Email address of the acting user. Must exactly match the email used to log in to the SpecCheck Dashboard.
-      schema:
-        type: string
-        format: email
+        type:
+          type:
+          - string
+          - 'null'
+          enum:
+          - ar
+          - mirror
+          - scratch
+          - uv
+          - null
+          description: The type of coat. Null when not set.
   responses:
-    PermissionError:
-      description: Authenticated but not allowed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            error:
-              type: permission_error
-              message: You do not have permission to perform this action.
     AuthenticationError:
       description: Authentication failed.
       content:
@@ -266,6 +256,16 @@ components:
             error:
               type: authentication_error
               message: Authentication failed.
+    PermissionError:
+      description: Authenticated but not allowed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              type: permission_error
+              message: You do not have permission to perform this action.
   securitySchemes:
     bearerAuth:
       type: http
