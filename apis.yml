@@ -47,7 +47,7 @@ x-tier: profiled
 x-tier-reason: enriched-from-docs
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-07-21'
+modified: '2026-10-06'
 tags:
 - Company
 - Enterprise Saas
@@ -127,6 +127,8 @@ apis:
   - type: Authentication
     url: authentication/speccheck-authentication.yml
 common:
+- url: https://www.speccheckrx.com/blog
+  type: Blog
 - type: DeveloperPortal
   url: https://docs.speccheckrx.com/
 - type: Documentation
