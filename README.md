@@ -64,6 +64,126 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-SpecCheck is a company surfaced as a portfolio company of initialized-capital and added to the API Evangelist network as a stub for enrichment. Sector: enterprise-saas. This profile is a lead awaiting the enrichment pipeline.
+SpecCheck (speccheckrx.com) is an optical lab ordering platform for eyecare practices and eyewear partners. Its REST API lets integrators authenticate with client credentials, list the labs a user is associated with, retrieve a lab's order settings, browse the lens catalog (styles, materials, and add-on coats, colors, and tints), and create prescription (rx), frame, redo, and multi-pair orders. The API uses 24-hour bearer tokens plus a User-Email actor header, an Idempotency-Key header for safe POST retries, cursor pagination on list endpoints, and a consistent error envelope. SpecCheck was surfaced as a portfolio company of Initialized Capital and enriched by the API Evangelist pipeline from its public documentation at docs.speccheckrx.com.
 
-Backed by: initialized-capital — https://speccheckrx.com/
+**Areas:** Company · Enterprise Saas · Optical · Eyewear · Eye Care · Optical Labs · Prescriptions · Ordering · Healthcare
+
+## SpecCheck on APIs.io
+
+Everything profiled for SpecCheck is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/speccheck/](https://apis.io/providers/speccheck/)** — or go straight to one of the APIs or properties below.
+
+### APIs (4)
+
+- [SpecCheck Authentication API](https://apis.io/apis/speccheck/speccheck-authentication-api/) — Obtain bearer access tokens.
+- [SpecCheck Catalogs API](https://apis.io/apis/speccheck/speccheck-catalogs-api/) — Lens styles, materials, and add-ons available for a lab.
+- [SpecCheck Labs API](https://apis.io/apis/speccheck/speccheck-labs-api/) — Labs associated with a user and their order settings.
+- [SpecCheck Orders API](https://apis.io/apis/speccheck/speccheck-orders-api/) — Create and list optical orders.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### Arazzo workflows (2)
+
+Multi-step workflows that chain operations into a business task.
+
+- [SpecCheck — Create a prescription (rx) order](https://apis.io/arazzos/speccheck/speccheck-create-rx-order/)
+- [SpecCheck — List recent orders for a lab](https://apis.io/arazzos/speccheck/speccheck-list-recent-orders/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [speccheck](https://apis.io/servers/speccheck/speccheck/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Speccheck Agentic Access](https://apis.io/agentic-access/speccheck/speccheck-agentic-access/)
+
+#### Collections (4)
+
+Postman and Open Collection request collections.
+
+- [SpecCheck Authentication API](https://apis.io/collections/speccheck/open-speccheck-authentication-api/)
+- [SpecCheck Authentication Catalogs API](https://apis.io/collections/speccheck/open-speccheck-catalogs-api/)
+- [SpecCheck Authentication Labs API](https://apis.io/collections/speccheck/open-speccheck-labs-api/)
+- [SpecCheck Authentication Orders API](https://apis.io/collections/speccheck/open-speccheck-orders-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Speccheck Openapi Overlay](https://apis.io/overlays/speccheck/speccheck-openapi-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Speccheck Authentication](https://apis.io/security/speccheck/speccheck-authentication/)
+- [Speccheck Domain Security](https://apis.io/security/speccheck/speccheck-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://speccheckrx.com/)
+- [Documentation](https://docs.speccheckrx.com/introduction)
+- [Getting started](https://docs.speccheckrx.com/introduction)
+- [API reference](https://docs.speccheckrx.com/api-reference/endpoint/create_order)
+- [Blog](https://www.speccheckrx.com/blog)
+- [Status](https://status.speccheckrx.com/)
+
+## API Evangelist rating
+
+**Kin Score 34.9** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 52.0 |
+| Contract governance | 4.5 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 61.3 |
+| Access clarity | 6.6 |
+
+**Agent readiness 32.6** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | verified |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 13.3** — Health
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/speccheck/](https://apis.io/providers/speccheck/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for SpecCheck: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/speccheck/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
